@@ -3,12 +3,26 @@ import { Book } from "../../types/Book";
 
 interface ProductCardProps {
   product: Book;
+  onRemove?: (id: string) => void;
 }
 
-export default function ProductCard({ product }: ProductCardProps) {
+export default function ProductCard({ product, onRemove }: ProductCardProps) {
+  const handleRemove = (e: React.MouseEvent) => {
+    e.preventDefault();
+    onRemove?.(product.id);
+  };
+
   return (
     <a href={`${product.link}`}>
-      <div className="transition-transform flex flex-col items-center w-full">
+      <div className="transition-transform flex flex-col items-center w-full relative">
+        {onRemove && (
+          <button
+            onClick={handleRemove}
+            className="absolute top-2 right-2 z-10 w-6 h-6 bg-white rounded-full flex items-center justify-center shadow-md hover:bg-gray-100"
+          >
+            <span className="text-gray-600 text-sm">×</span>
+          </button>
+        )}
         <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-[5px_5px_10px_rgba(0,0,0,0.3)]">
           <Image
             src={product.cover[0].url}
@@ -19,9 +33,12 @@ export default function ProductCard({ product }: ProductCardProps) {
           />
         </div>
         <div className="mt-3">
-          <h3 className="text-lg font-semibold line-clamp-2">
+          <h3 className="text-xs font-semibold line-clamp-2 min-h-[2rem] leading-4">
             {product.title}
           </h3>
+          <button className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600 transition-colors">
+            buy amazon
+          </button>
         </div>
       </div>
     </a>
