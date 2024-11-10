@@ -1,20 +1,46 @@
-import { BookList } from "../components/BookList";
-import { cookies } from "next/headers";
-import { createClient } from "./utils/supabase/server";
+"use client";
 
-async function Simple() {
-  // サーバーサイドでデータを取得
-  const cookieStore = await cookies();
-  const supabase = await createClient(cookieStore);
-  const { data: books, error } = await supabase.from("books").select();
-  if (error) {
-    console.error("Error fetching books:", error);
-  }
+import { useEffect, useState } from "react";
+import { BookList } from "../components/BookList";
+import { createClient } from "./utils/supabase/client";
+import { Database } from "../../database.types";
+
+function Simple() {
+  const [books, setBooks] = useState<
+    Database["public"]["Tables"]["books"]["Row"][]
+  >([]);
+  const supabase = createClient();
+
+  useEffect(() => {
+    const fetchBooks = async () => {
+      const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
+      const likedBookIds = likedBooks.map(
+        (book: Database["public"]["Tables"]["books"]["Row"]) => book.id
+      );
+
+      let query = supabase.from("books").select();
+
+      if (likedBookIds.length > 0) {
+        query = query.filter("id", "not.in", `(${likedBookIds.join(",")})`);
+      }
+
+      const { data, error } = await query;
+
+      if (error) {
+        console.error("Error fetching books:", error);
+        return;
+      }
+
+      setBooks(data || []);
+    };
+
+    fetchBooks();
+  }, [supabase]);
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
-        <BookList initialBooks={books || []} />
+        <BookList initialBooks={books} />
       </div>
     </div>
   );

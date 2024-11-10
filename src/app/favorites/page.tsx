@@ -6,8 +6,8 @@ import { Database } from '../../../database.types'
 
 const getFavoriteProducts = (): Database["public"]["Tables"]["books"]["Row"][] => {
   if (typeof window === 'undefined') return []
-  const likedItems = localStorage.getItem('likedItems')
-  return likedItems ? JSON.parse(likedItems) : []
+  const likedBooks = localStorage.getItem('likedBooks')
+  return likedBooks ? JSON.parse(likedBooks) : []
 }
 
 export default function FavoritesPage() {

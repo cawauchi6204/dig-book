@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { BookCard } from "@/components/BookCard";
 import { Database } from "../../database.types";
 
@@ -8,7 +8,12 @@ type Props = {
 };
 
 export function BookList({ initialBooks }: Props) {
-  const [data] = useState(initialBooks);
+  const [data, setData] = useState(initialBooks);
+
+  useEffect(() => {
+    setData(initialBooks);
+  }, [initialBooks]);
+
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
 
   const swiped = (direction: string, nameToDelete: string) => {
@@ -18,17 +23,17 @@ export function BookList({ initialBooks }: Props) {
         window.open(currentItem.link, "_blank");
       }
     } else if (direction === "right") {
-      const likedItems = JSON.parse(localStorage.getItem("likedItems") || "[]");
+      const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
       const currentItem = data.find((item) => item.id === nameToDelete);
       if (
         currentItem &&
-        !likedItems.some(
+        !likedBooks.some(
           (item: Database["public"]["Tables"]["books"]["Row"]) =>
             item.id === currentItem.id
         )
       ) {
-        likedItems.push(currentItem);
-        localStorage.setItem("likedItems", JSON.stringify(likedItems));
+        likedBooks.push(currentItem);
+        localStorage.setItem("likedBooks", JSON.stringify(likedBooks));
       }
     }
   };
