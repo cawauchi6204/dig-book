@@ -6,12 +6,10 @@ import { Book } from "../../types/Book";
 
 function Simple() {
   const [data, setData] = useState<Book[]>([]);
-  const [lastDirection, setLastDirection] = useState<string | null>(null);
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
 
   const swiped = (direction: string, nameToDelete: string) => {
     console.log("removing: " + nameToDelete);
-    setLastDirection(direction);
 
     // 上スワイプの場合、リンク先に遷移
     if (direction === "up") {
@@ -102,14 +100,6 @@ function Simple() {
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
-      <link
-        href="https://fonts.googleapis.com/css?family=Damion&display=swap"
-        rel="stylesheet"
-      />
-      <link
-        href="https://fonts.googleapis.com/css?family=Alatsi&display=swap"
-        rel="stylesheet"
-      />
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
         {data.map((character) => (
           <TinderCard
@@ -152,17 +142,28 @@ function Simple() {
           </TinderCard>
         ))}
       </div>
-      {lastDirection && (
-        <div className="w-full flex justify-center mt-4">
-          <span className="px-4 py-2 bg-white/80 rounded-full text-gray-700 shadow-md animate-popup">
-            {lastDirection === "right"
-              ? "保存しました！"
-              : lastDirection === "up"
-              ? "リンクを開きます"
-              : `${lastDirection}にスワイプしました`}
-          </span>
+      <div className="fixed left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-4 w-[90vw] max-w-[400px]">
+        <div className="flex flex-col gap-2">
+          <p className="flex items-center gap-2 text-gray-700">
+            <span className="inline-block w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-sm">
+              ↑
+            </span>
+            <span>open link</span>
+          </p>
+          <p className="flex items-center gap-2 text-gray-700">
+            <span className="inline-block w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-sm">
+              →
+            </span>
+            <span>add to favorites</span>
+          </p>
+          <p className="flex items-center gap-2 text-gray-700">
+            <span className="inline-block w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-sm">
+              ←
+            </span>
+            <span>not interested</span>
+          </p>
         </div>
-      )}
+      </div>
     </div>
   );
 }
