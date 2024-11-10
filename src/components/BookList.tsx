@@ -1,7 +1,6 @@
 "use client";
 import React, { useState } from "react";
 import { BookCard } from "@/components/BookCard";
-import { SwipeGuide } from "@/components/SwipeGuide";
 import { Database } from "../../database.types";
 
 type Props = {
