@@ -1,18 +1,17 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { Book } from '../../../types/Book'
 import ProductCard from '../../components/ProductCard'
+import { Database } from '../../../database.types'
 
-const getFavoriteProducts = (): Book[] => {
+const getFavoriteProducts = (): Database["public"]["Tables"]["books"]["Row"][] => {
   if (typeof window === 'undefined') return []
   const likedItems = localStorage.getItem('likedItems')
   return likedItems ? JSON.parse(likedItems) : []
 }
 
 export default function FavoritesPage() {
-  const [favorites, setFavorites] = useState<Book[]>([])
-  console.log("🚀 ~ FavoritesPage ~ favorites:", favorites)
+  const [favorites, setFavorites] = useState<Database["public"]["Tables"]["books"]["Row"][]>([])
   const [isLoading, setIsLoading] = useState(true)
 
   useEffect(() => {
