@@ -1,9 +1,9 @@
 import React from "react";
 import TinderCard from "react-tinder-card";
-import { Book } from "../../types/Book";
+import { Database } from "../../database.types";
 
 interface BookCardProps {
-  character: Book;
+  character: Database["public"]["Tables"]["books"]["Row"];
   flipped: { [key: string]: boolean };
   onSwipe: (dir: string, id: string) => void;
   onCardLeftScreen: (id: string) => void;
@@ -36,7 +36,7 @@ export const BookCard: React.FC<BookCardProps> = ({
       >
         {/* 表面（本の表紙） */}
         <div
-          style={{ backgroundImage: `url(${character.cover[0].url})` }}
+          style={{ backgroundImage: `url(${character.cover || ""})` }}
           className="absolute w-full h-full rounded-sm bg-cover bg-center backface-hidden"
         ></div>
         {/* 裏面（本の内容） */}
@@ -46,14 +46,11 @@ export const BookCard: React.FC<BookCardProps> = ({
           </h3>
           <div
             className="text-gray-600 text-sm prose prose-sm"
-            dangerouslySetInnerHTML={{ __html: character.content }}
+            dangerouslySetInnerHTML={{ __html: character.content || "" }}
           ></div>
           <div className="mt-4 pt-2 border-t border-gray-200">
             <p className="text-gray-500 text-xs">
-              作成日: {new Date(character.createdAt).toLocaleDateString()}
-            </p>
-            <p className="text-gray-500 text-xs">
-              更新日: {new Date(character.updatedAt).toLocaleDateString()}
+              発売日: {new Date(character.published_at || "").toLocaleDateString()}
             </p>
           </div>
         </div>
