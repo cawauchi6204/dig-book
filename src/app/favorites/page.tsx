@@ -33,20 +33,20 @@ export default function FavoritesPage() {
     return (
       <div className="container mx-auto px-4">
         <div className="pt-8 pb-32">
-          <p className="text-gray-600">読み込み中...</p>
+          <p className="text-white">読み込み中...</p>
         </div>
       </div>
     )
   }
 
   return (
-    <div className="container mx-auto px-4">
+    <div className="container mx-auto px-4 bg-black min-h-screen">
       <div className="py-16">
-        <h1 className="text-3xl font-bold mb-8">
+        <h1 className="text-3xl font-bold mb-8 text-white">
           Your Favorites
         </h1>
         {favorites.length === 0 ? (
-          <p className="text-gray-600">お気に入りに登録された商品はありません。</p>
+          <p className="text-white">お気に入りに登録された商品はありません。</p>
         ) : (
           <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {favorites.map((book) => (

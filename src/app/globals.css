@@ -13,8 +13,7 @@ body {
   width: 100vw;
   min-height: 100vh;
   overflow: hidden;
-  /* background: linear-gradient(#fff, #999); */
-  background: linear-gradient(#e66465, #9198e5);
+  background: black;
 }
 
 * {
@@ -96,4 +95,8 @@ body {
   body {
     @apply bg-background text-foreground;
   }
+}
+
+html {
+  @apply dark;
 }
