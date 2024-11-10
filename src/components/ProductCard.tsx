@@ -1,8 +1,8 @@
 import Image from "next/image";
-import { Book } from "../../types/Book";
+import { Database } from "../../database.types";
 
 interface ProductCardProps {
-  product: Book;
+  product: Database["public"]["Tables"]["books"]["Row"];
   onRemove?: (id: string) => void;
 }
 
@@ -25,8 +25,8 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
         )}
         <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-[5px_5px_10px_rgba(0,0,0,0.3)]">
           <Image
-            src={product.cover[0].url}
-            alt={product.title}
+            src={product.cover ?? ""}
+            alt={product.title ?? ""}
             fill
             className="object-cover"
             sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
