@@ -44,12 +44,12 @@ export default function FavoritesPage() {
     <div className="container mx-auto px-4">
       <div className="py-16">
         <h1 className="text-3xl font-bold mb-8">
-          お気に入り
+          Your Favorites
         </h1>
         {favorites.length === 0 ? (
           <p className="text-gray-600">お気に入りに登録された商品はありません。</p>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {favorites.map((book) => (
               <div key={book.id}>
                 <ProductCard product={book} />
