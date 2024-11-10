@@ -8,8 +8,9 @@ async function Simple() {
   const cookieStore = await cookies();
   const supabase = await createClient(cookieStore);
   const { data: books, error } = await supabase.from("books").select();
-  console.log("🚀 ~ books:", books);
-  console.log("🚀 ~ error:", error);
+  if (error) {
+    console.error("Error fetching books:", error);
+  }
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">

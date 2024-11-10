@@ -12,8 +12,6 @@ export function BookList({ initialBooks }: Props) {
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
 
   const swiped = (direction: string, nameToDelete: string) => {
-    console.log("removing: " + nameToDelete);
-
     if (direction === "up") {
       const currentItem = data.find((item) => item.id === nameToDelete);
       if (currentItem && currentItem.link) {

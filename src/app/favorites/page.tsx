@@ -32,7 +32,7 @@ export default function FavoritesPage() {
   if (isLoading) {
     return (
       <div className="container mx-auto px-4">
-        <div className="py-16">
+        <div className="pt-8 pb-32">
           <p className="text-gray-600">読み込み中...</p>
         </div>
       </div>
