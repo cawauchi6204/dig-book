@@ -1,8 +1,9 @@
 "use client";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import TinderCard from "react-tinder-card";
 import { Book } from "../../types/Book";
+import { BookCard } from "@/components/BookCard";
+import { SwipeGuide } from "@/components/SwipeGuide";
 
 function Simple() {
   const [data, setData] = useState<Book[]>([]);
@@ -102,68 +103,17 @@ function Simple() {
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-6">
         {data.map((character) => (
-          <TinderCard
-            className="absolute w-full h-full"
+          <BookCard
             key={character.id}
-            onSwipe={(dir) => swiped(dir, character.id)}
-            onCardLeftScreen={() => outOfFrame(character.id)}
-          >
-            <div
-              onClick={(e) => handleInteraction(character.id, e)}
-              onTouchStart={(e) => handleInteraction(character.id, e)}
-              className={`relative w-[90vw] h-[calc(90vw*1.4)] max-w-[500px] max-h-[700px] mx-auto rounded-sm shadow-[5px_5px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-700 preserve-3d ${
-                flipped[character.id] ? "rotate-y-180" : ""
-              }`}
-            >
-              {/* 表面（本の表紙） */}
-              <div
-                style={{ backgroundImage: `url(${character.cover[0].url})` }}
-                className="absolute w-full h-full rounded-sm bg-cover bg-center backface-hidden"
-              ></div>
-              {/* 裏面（本の内容） */}
-              <div className="absolute w-full h-full rounded-sm bg-white p-4 rotate-y-180 backface-hidden overflow-y-auto">
-                <h3 className="font-bold text-xl mb-2 text-gray-800">
-                  {character.title}
-                </h3>
-                <div
-                  className="text-gray-600 text-sm prose prose-sm"
-                  dangerouslySetInnerHTML={{ __html: character.content }}
-                ></div>
-                <div className="mt-4 pt-2 border-t border-gray-200">
-                  <p className="text-gray-500 text-xs">
-                    作成日: {new Date(character.createdAt).toLocaleDateString()}
-                  </p>
-                  <p className="text-gray-500 text-xs">
-                    更新日: {new Date(character.updatedAt).toLocaleDateString()}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </TinderCard>
+            character={character}
+            flipped={flipped}
+            onSwipe={swiped}
+            onCardLeftScreen={outOfFrame}
+            onInteraction={handleInteraction}
+          />
         ))}
       </div>
-      <div className="fixed left-1/2 transform -translate-x-1/2 bg-white/80 backdrop-blur-sm rounded-lg shadow-lg p-4 w-[90vw] max-w-[400px]">
-        <div className="flex flex-col gap-2">
-          <p className="flex items-center gap-2 text-gray-700">
-            <span className="inline-block w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-sm">
-              ↑
-            </span>
-            <span>open link</span>
-          </p>
-          <p className="flex items-center gap-2 text-gray-700">
-            <span className="inline-block w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-sm">
-              →
-            </span>
-            <span>add to favorites</span>
-          </p>
-          <p className="flex items-center gap-2 text-gray-700">
-            <span className="inline-block w-6 h-6 bg-gray-100 rounded flex items-center justify-center text-sm">
-              ←
-            </span>
-            <span>not interested</span>
-          </p>
-        </div>
-      </div>
+      <SwipeGuide />
     </div>
   );
 }
