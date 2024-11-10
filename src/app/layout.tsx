@@ -16,10 +16,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>
+      <body className="flex flex-col min-h-screen">
         <Header />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_TRACKING_ID!} />
-        {children}
+        <main className="flex-1">
+          {children}
+        </main>
         <BottomBar />
       </body>
     </html>
