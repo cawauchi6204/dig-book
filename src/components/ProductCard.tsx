@@ -33,7 +33,7 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           />
         </div>
         <div className="mt-3">
-          <h3 className="text-xs text-white font-semibold line-clamp-2 min-h-[2rem] leading-4">
+          <h3 className="text-xs font-semibold line-clamp-2 min-h-[2rem] leading-4">
             {product.title}
           </h3>
           <button className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600 transition-colors">
