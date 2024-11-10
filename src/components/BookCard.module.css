@@ -1,0 +1,79 @@
+.tinderCard {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.card {
+  position: relative;
+  width: 90vw;
+  height: calc(90vw * 1.4);
+  max-width: 500px;
+  max-height: 700px;
+  margin: 0 auto;
+  border-radius: 5px;
+  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.7s;
+  transform-style: preserve-3d;
+}
+
+.flipped {
+  transform: rotateY(180deg);
+}
+
+.coverImage {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 5px;
+  background-size: cover;
+  background-position: center;
+  backface-visibility: hidden;
+}
+
+.coverImage:after {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  content: "";
+  background: linear-gradient(-90deg, #fff0, #ffffff1a 80%, #ffffff4d 95%, #fff6 96.5%, #cbcbcb14 98%, #6a6a6a1a);
+  border-radius: 5px;
+}
+
+.content {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  padding: 1rem;
+  border-radius: 5px;
+  background-color: white;
+  transform: rotateY(180deg);
+  backface-visibility: hidden;
+  overflow-y: auto;
+}
+
+.title {
+  font-weight: bold;
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #1f2937;
+}
+
+.description {
+  color: #4b5563;
+  font-size: 0.875rem;
+}
+
+.footer {
+  margin-top: 1rem;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e5e7eb;
+}
+
+.date {
+  color: #6b7280;
+  font-size: 0.75rem;
+} 

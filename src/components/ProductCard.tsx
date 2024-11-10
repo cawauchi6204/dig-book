@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { Database } from "../../database.types";
+import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
   product: Database["public"]["Tables"]["books"]["Row"];
@@ -24,13 +25,15 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           </button>
         )}
         <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-[5px_5px_10px_rgba(0,0,0,0.3)]">
-          <Image
-            src={product.cover ?? ""}
-            alt={product.title ?? ""}
-            fill
-            className="object-cover"
-            sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-          />
+          <div className={styles.bookCover}>
+            <Image
+              src={product.cover ?? ""}
+              alt={product.title ?? ""}
+              fill
+              className="object-cover"
+              sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
+            />
+          </div>
         </div>
         <div className="mt-3">
           <h3 className="text-xs font-semibold line-clamp-2 min-h-[2rem] leading-4">

@@ -2,6 +2,9 @@ import React from "react";
 import TinderCard from "react-tinder-card";
 import { Database } from "../../database.types";
 
+// 新しいスタイルシートをインポート
+import styles from './BookCard.module.css';
+
 interface BookCardProps {
   character: Database["public"]["Tables"]["books"]["Row"];
   flipped: { [key: string]: boolean };
@@ -19,7 +22,7 @@ export const BookCard: React.FC<BookCardProps> = ({
 }) => {
   return (
     <TinderCard
-      className="absolute w-full h-full"
+      className={styles.tinderCard}
       key={character.id}
       onSwipe={(dir) => onSwipe(dir, character.id)}
       onCardLeftScreen={() => onCardLeftScreen(character.id)}
@@ -30,26 +33,22 @@ export const BookCard: React.FC<BookCardProps> = ({
       <div
         onClick={(e) => onInteraction(character.id, e)}
         onTouchStart={(e) => onInteraction(character.id, e)}
-        className={`relative w-[90vw] h-[calc(90vw*1.4)] max-w-[500px] max-h-[700px] mx-auto rounded-sm shadow-[5px_5px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-700 preserve-3d ${
-          flipped[character.id] ? "rotate-y-180" : ""
-        }`}
+        className={`${styles.card} ${flipped[character.id] ? styles.flipped : ''}`}
       >
         {/* 表面（本の表紙） */}
         <div
           style={{ backgroundImage: `url(${character.cover || ""})` }}
-          className="absolute w-full h-full rounded-sm bg-cover bg-center backface-hidden"
+          className={styles.coverImage}
         ></div>
         {/* 裏面（本の内容） */}
-        <div className="absolute w-full h-full rounded-sm bg-white p-4 rotate-y-180 backface-hidden overflow-y-auto">
-          <h3 className="font-bold text-xl mb-2 text-gray-800">
-            {character.title}
-          </h3>
+        <div className={styles.content}>
+          <h3 className={styles.title}>{character.title}</h3>
           <div
-            className="text-gray-600 text-sm prose prose-sm"
+            className={styles.description}
             dangerouslySetInnerHTML={{ __html: character.content || "" }}
           ></div>
-          <div className="mt-4 pt-2 border-t border-gray-200">
-            <p className="text-gray-500 text-xs">
+          <div className={styles.footer}>
+            <p className={styles.date}>
               発売日: {new Date(character.published_at || "").toLocaleDateString()}
             </p>
           </div>
