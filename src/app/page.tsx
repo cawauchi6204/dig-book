@@ -100,7 +100,7 @@ function Simple() {
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
-      <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
+      <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-6">
         {data.map((character) => (
           <TinderCard
             className="absolute w-full h-full"
