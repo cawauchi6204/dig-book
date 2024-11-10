@@ -27,6 +27,24 @@ export default function BottomBar() {
           </span>
         </button>
         <button
+          onClick={() => router.push("/categories")}
+          type="button"
+          className="w-full inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
+        >
+          <svg
+            className="w-5 h-5 mb-2 text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500"
+            aria-hidden="true"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor"
+            viewBox="0 0 20 20"
+          >
+            <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a2 2 0 0 0-2-2H7a2 2 0 0 0-2 2v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 4h4v1H7V4Zm-.5 5a.5.5 0 0 1-1 0V7h1v2Zm5 0a.5.5 0 0 1-1 0V7h1v2Z" />
+          </svg>
+          <span className="text-sm text-gray-500 dark:text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-500">
+            Categories
+          </span>
+        </button>
+        <button
           onClick={() => router.push("/favorites")}
           type="button"
           className="w-full inline-flex flex-col items-center justify-center px-5 hover:bg-gray-50 dark:hover:bg-gray-800 group"
