@@ -1,27 +1,11 @@
 "use client";
 import axios from "axios";
-import Image from "next/image";
 import React, { useEffect, useState } from "react";
 import TinderCard from "react-tinder-card";
-
-interface Image {
-  id: string;
-  cover: {
-    url: string;
-    height: number;
-    width: number;
-  }[];
-  content: string;
-  link: string;
-  publishedAt: string;
-  revisedAt: string;
-  title: string;
-  updatedAt: string;
-  createdAt: string;
-}
+import { Book } from "../../types/Book";
 
 function Simple() {
-  const [data, setData] = useState<Image[]>([]);
+  const [data, setData] = useState<Book[]>([]);
   const [lastDirection, setLastDirection] = useState<string | null>(null);
   const [flipped, setFlipped] = useState<{ [key: string]: boolean }>({});
 
@@ -33,7 +17,7 @@ function Simple() {
     if (direction === "up") {
       const currentItem = data.find((item) => item.id === nameToDelete);
       if (currentItem && currentItem.link) {
-        window.open(currentItem.link, '_blank');
+        window.open(currentItem.link, "_blank");
       }
     }
     // 右スワイプの場合、local storageに保存
@@ -42,7 +26,7 @@ function Simple() {
       const currentItem = data.find((item) => item.id === nameToDelete);
       if (
         currentItem &&
-        !likedItems.some((item: Image) => item.id === currentItem.id)
+        !likedItems.some((item: Book) => item.id === currentItem.id)
       ) {
         likedItems.push(currentItem);
         localStorage.setItem("likedItems", JSON.stringify(likedItems));
@@ -55,15 +39,18 @@ function Simple() {
   };
 
   const handleClick = (id: string) => {
-    setFlipped(prev => ({
+    setFlipped((prev) => ({
       ...prev,
-      [id]: !prev[id]
+      [id]: !prev[id],
     }));
   };
 
-  const handleInteraction = (id: string, e: React.MouseEvent | React.TouchEvent) => {
+  const handleInteraction = (
+    id: string,
+    e: React.MouseEvent | React.TouchEvent
+  ) => {
     // タッチイベントの場合、タップとスワイプを区別するために時間とモーション量をチェック
-    if (e.type === 'touchstart') {
+    if (e.type === "touchstart") {
       const touch = (e as React.TouchEvent).touches[0];
       const startTime = new Date().getTime();
       const startX = touch.clientX;
@@ -86,10 +73,10 @@ function Simple() {
           handleClick(id);
         }
 
-        document.removeEventListener('touchend', handleTouchEnd);
+        document.removeEventListener("touchend", handleTouchEnd);
       };
 
-      document.addEventListener('touchend', handleTouchEnd);
+      document.addEventListener("touchend", handleTouchEnd);
     } else {
       // クリックの場合は通常通り処理
       handleClick(id);
@@ -114,7 +101,7 @@ function Simple() {
   }, []);
 
   return (
-    <div className="h-screen overflow-hidden">
+    <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
       <link
         href="https://fonts.googleapis.com/css?family=Damion&display=swap"
         rel="stylesheet"
@@ -123,7 +110,7 @@ function Simple() {
         href="https://fonts.googleapis.com/css?family=Alatsi&display=swap"
         rel="stylesheet"
       />
-      <div className="w-full max-w-[600px] h-[70vh] relative mx-auto">
+      <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
         {data.map((character) => (
           <TinderCard
             className="absolute w-full h-full"
@@ -134,37 +121,47 @@ function Simple() {
             <div
               onClick={(e) => handleInteraction(character.id, e)}
               onTouchStart={(e) => handleInteraction(character.id, e)}
-              className={`relative w-full h-full rounded-[20px] shadow-lg cursor-pointer transition-transform duration-700 preserve-3d ${
-                flipped[character.id] ? 'rotate-y-180' : ''
+              className={`relative w-[90vw] h-[calc(90vw*1.4)] max-w-[500px] max-h-[700px] mx-auto rounded-sm shadow-[5px_5px_10px_rgba(0,0,0,0.3)] cursor-pointer transition-all duration-700 preserve-3d ${
+                flipped[character.id] ? "rotate-y-180" : ""
               }`}
             >
-              {/* 表面 */}
+              {/* 表面（本の表紙） */}
               <div
                 style={{ backgroundImage: `url(${character.cover[0].url})` }}
-                className="absolute w-full h-full rounded-[20px] bg-cover bg-center backface-hidden"
-              >
-                <h3 className="absolute bottom-0 m-4 text-white font-bold text-2xl">
+                className="absolute w-full h-full rounded-sm bg-cover bg-center backface-hidden"
+              ></div>
+              {/* 裏面（本の内容） */}
+              <div className="absolute w-full h-full rounded-sm bg-white p-4 rotate-y-180 backface-hidden overflow-y-auto">
+                <h3 className="font-bold text-xl mb-2 text-gray-800">
                   {character.title}
                 </h3>
-              </div>
-              {/* 裏面 */}
-              <div className="absolute w-full h-full rounded-[20px] bg-white p-4 rotate-y-180 backface-hidden overflow-y-auto">
-                <h3 className="font-bold text-xl mb-2">{character.title}</h3>
-                <p dangerouslySetInnerHTML={{ __html: character.content }}></p>
-                <p className="text-gray-600">作成日: {new Date(character.createdAt).toLocaleDateString()}</p>
-                <p className="text-gray-600">更新日: {new Date(character.updatedAt).toLocaleDateString()}</p>
-                {/* 必要に応じて他の情報を追加 */}
+                <div
+                  className="text-gray-600 text-sm prose prose-sm"
+                  dangerouslySetInnerHTML={{ __html: character.content }}
+                ></div>
+                <div className="mt-4 pt-2 border-t border-gray-200">
+                  <p className="text-gray-500 text-xs">
+                    作成日: {new Date(character.createdAt).toLocaleDateString()}
+                  </p>
+                  <p className="text-gray-500 text-xs">
+                    更新日: {new Date(character.updatedAt).toLocaleDateString()}
+                  </p>
+                </div>
               </div>
             </div>
           </TinderCard>
         ))}
       </div>
-      {lastDirection ? (
-        <h2 className="w-full flex justify-center text-white animate-popup">
-          You swiped {lastDirection}
-        </h2>
-      ) : (
-        <h2 className="w-full flex justify-center text-white animate-popup"></h2>
+      {lastDirection && (
+        <div className="w-full flex justify-center mt-4">
+          <span className="px-4 py-2 bg-white/80 rounded-full text-gray-700 shadow-md animate-popup">
+            {lastDirection === "right"
+              ? "保存しました！"
+              : lastDirection === "up"
+              ? "リンクを開きます"
+              : `${lastDirection}にスワイプしました`}
+          </span>
+        </div>
       )}
     </div>
   );
