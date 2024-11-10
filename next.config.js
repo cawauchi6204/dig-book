@@ -4,11 +4,11 @@ const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: 'https',
-        hostname: 'images.microcms-assets.io',
+        protocol: "https",
+        hostname: "labplhompumzwpzizkgl.supabase.co",
       },
     ],
   },
 };
 
-export default nextConfig;
+module.exports = nextConfig;
