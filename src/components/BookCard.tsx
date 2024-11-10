@@ -23,6 +23,9 @@ export const BookCard: React.FC<BookCardProps> = ({
       key={character.id}
       onSwipe={(dir) => onSwipe(dir, character.id)}
       onCardLeftScreen={() => onCardLeftScreen(character.id)}
+      swipeRequirementType="position"
+      swipeThreshold={100}
+      preventSwipe={["up", "down"]}
     >
       <div
         onClick={(e) => onInteraction(character.id, e)}
