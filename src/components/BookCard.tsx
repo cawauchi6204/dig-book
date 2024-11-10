@@ -1,9 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
 import { Database } from "../../database.types";
 
 // 新しいスタイルシートをインポート
-import styles from './BookCard.module.css';
+import styles from "./BookCard.module.css";
 
 interface BookCardProps {
   character: Database["public"]["Tables"]["books"]["Row"];
@@ -20,28 +20,61 @@ export const BookCard: React.FC<BookCardProps> = ({
   onCardLeftScreen,
   onInteraction,
 }) => {
+  const [dragDirection, setDragDirection] = useState<string | null>(null);
+  const handleSwipe = (
+    dir: string,
+    id: string,
+    event?: React.MouseEvent | React.TouchEvent
+  ) => {
+    const normalizedDir =
+      dir === "up"
+        ? (event as React.MouseEvent)?.clientX > window.innerWidth / 2
+          ? "right"
+          : "left"
+        : dir;
+    setDragDirection(normalizedDir);
+    onSwipe(normalizedDir, id);
+  };
+
   return (
     <TinderCard
       className={styles.tinderCard}
       key={character.id}
-      onSwipe={(dir) => onSwipe(dir, character.id)}
+      onSwipe={(dir) => handleSwipe(dir, character.id)}
       onCardLeftScreen={() => onCardLeftScreen(character.id)}
       swipeRequirementType="position"
-      swipeThreshold={100}
+      swipeThreshold={10}
       preventSwipe={["up", "down"]}
     >
       <div
         onClick={(e) => onInteraction(character.id, e)}
         onTouchStart={(e) => onInteraction(character.id, e)}
-        className={`${styles.card} ${flipped[character.id] ? styles.flipped : ''}`}
+        className={`${styles.card} ${
+          flipped[character.id] ? styles.flipped : ""
+        }`}
       >
+        {/* Likeの表示 */}
+        {dragDirection && (
+          <div className={`${styles.dragLabel} ${styles[dragDirection]}`}>
+            {dragDirection === "right" ? "LIKE!" : "NOPE!"}
+          </div>
+        )}
         {/* 表面（本の表紙） */}
         <div
           style={{ backgroundImage: `url(${character.cover || ""})` }}
           className={styles.coverImage}
         ></div>
         {/* 裏面（本の内容） */}
-        <div className={styles.content}>
+        <div
+          className={styles.content}
+          onClick={(e) => {
+            // カードが裏面の時は、クリックイベントの伝播を止めて
+            // カード全体のクリックイベントが発火するのを防ぐ
+            if (flipped[character.id]) {
+              e.stopPropagation();
+            }
+          }}
+        >
           <h3 className={styles.title}>{character.title}</h3>
           <div
             className={styles.description}
@@ -49,7 +82,8 @@ export const BookCard: React.FC<BookCardProps> = ({
           ></div>
           <div className={styles.footer}>
             <p className={styles.date}>
-              発売日: {new Date(character.published_at || "").toLocaleDateString()}
+              発売日:{" "}
+              {new Date(character.published_at || "").toLocaleDateString()}
             </p>
           </div>
         </div>
