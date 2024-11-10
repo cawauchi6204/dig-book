@@ -3,6 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import BottomBar from "@/components/BottomBar";
 import Header from "../components/Header";
+import { GoogleAnalytics } from "@next/third-parties/google";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -31,6 +32,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable} antialiased overflow-hidden`}
       >
         <Header />
+        <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_TRACKING_ID!} />
         {children}
         <BottomBar />
       </body>
