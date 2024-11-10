@@ -1,7 +1,6 @@
 import { BookList } from "../components/BookList";
 import { cookies } from "next/headers";
 import { createClient } from "./utils/supabase/server";
-import { SwipeGuide } from "@/components/SwipeGuide";
 
 async function Simple() {
   // サーバーサイドでデータを取得
@@ -14,10 +13,9 @@ async function Simple() {
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
-      <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-6">
+      <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
         <BookList initialBooks={books || []} />
       </div>
-      <SwipeGuide />
     </div>
   );
 }

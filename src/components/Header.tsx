@@ -4,7 +4,7 @@ export default function Header() {
   return (
     <>
       <header className="fixed top-0 left-0 right-0 bg-white/80 backdrop-blur-md border-b border-gray-200 z-50">
-        <div className="max-w-screen-xl mx-auto px-4 h-16 flex items-center justify-between">
+        <div className="max-w-screen-xl mx-auto px-4 h-8 flex items-center justify-between">
           <h1 className="text-xl font-bold">DigBook</h1>
           <nav className="hidden sm:block">
             <ul className="flex space-x-6">
@@ -22,7 +22,7 @@ export default function Header() {
           </nav>
         </div>
       </header>
-      <div className="h-16"></div>
+      <div className="h-8"></div>
     </>
   );
 }
