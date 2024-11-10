@@ -11,6 +11,8 @@ interface Image {
     height: number;
     width: number;
   }[];
+  content: string;
+  link: string;
   publishedAt: string;
   revisedAt: string;
   title: string;
@@ -27,8 +29,15 @@ function Simple() {
     console.log("removing: " + nameToDelete);
     setLastDirection(direction);
 
+    // 上スワイプの場合、リンク先に遷移
+    if (direction === "up") {
+      const currentItem = data.find((item) => item.id === nameToDelete);
+      if (currentItem && currentItem.link) {
+        window.open(currentItem.link, '_blank');
+      }
+    }
     // 右スワイプの場合、local storageに保存
-    if (direction === "right") {
+    else if (direction === "right") {
       const likedItems = JSON.parse(localStorage.getItem("likedItems") || "[]");
       const currentItem = data.find((item) => item.id === nameToDelete);
       if (
@@ -138,10 +147,10 @@ function Simple() {
                   {character.title}
                 </h3>
               </div>
-              
               {/* 裏面 */}
-              <div className="absolute w-full h-full rounded-[20px] bg-white p-4 rotate-y-180 backface-hidden">
+              <div className="absolute w-full h-full rounded-[20px] bg-white p-4 rotate-y-180 backface-hidden overflow-y-auto">
                 <h3 className="font-bold text-xl mb-2">{character.title}</h3>
+                <p dangerouslySetInnerHTML={{ __html: character.content }}></p>
                 <p className="text-gray-600">作成日: {new Date(character.createdAt).toLocaleDateString()}</p>
                 <p className="text-gray-600">更新日: {new Date(character.updatedAt).toLocaleDateString()}</p>
                 {/* 必要に応じて他の情報を追加 */}
