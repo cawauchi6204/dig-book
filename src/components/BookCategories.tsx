@@ -1,4 +1,4 @@
-import { Book, BookOpen, Bookmark, Clock, Crown, History, LucideIcon } from "lucide-react";
+import { Book, BookOpen, Bookmark, GraduationCap, Computer, Briefcase, Heart, Music, GamepadIcon, BookText, ScrollText, Baby, LucideIcon } from "lucide-react";
 
 // カテゴリーの型定義
 type Category = {
@@ -9,19 +9,23 @@ type Category = {
 
 // カテゴリーデータ
 const categories: Category[] = [
-  { title: "小説", icon: BookOpen, bgColor: "bg-rose-600" },
-  { title: "マンガ", icon: Book, bgColor: "bg-emerald-700" },
-  { title: "新刊", icon: Crown, bgColor: "bg-purple-600" },
-  { title: "ビジネス", icon: Bookmark, bgColor: "bg-blue-800" },
-  { title: "履歴", icon: History, bgColor: "bg-red-800" },
-  { title: "ライトノベル", icon: Book, bgColor: "bg-cyan-700" },
-  { title: "雑誌", icon: Clock, bgColor: "bg-indigo-900" },
+  { title: "文学・評論", icon: BookOpen, bgColor: "bg-gradient-to-br from-rose-500 to-rose-700" },
+  { title: "コミック", icon: Book, bgColor: "bg-gradient-to-br from-emerald-500 to-emerald-700" },
+  { title: "ビジネス・経済", icon: Briefcase, bgColor: "bg-gradient-to-br from-blue-500 to-blue-700" },
+  { title: "コンピュータ・IT", icon: Computer, bgColor: "bg-gradient-to-br from-cyan-500 to-cyan-700" },
+  { title: "資格・検定", icon: GraduationCap, bgColor: "bg-gradient-to-br from-amber-500 to-amber-700" },
+  { title: "暮らし・健康", icon: Heart, bgColor: "bg-gradient-to-br from-pink-500 to-pink-700" },
+  { title: "ライトノベル", icon: BookText, bgColor: "bg-gradient-to-br from-purple-500 to-purple-700" },
+  { title: "絵本・児童書", icon: Baby, bgColor: "bg-gradient-to-br from-green-500 to-green-700" },
+  { title: "楽譜・音楽書", icon: Music, bgColor: "bg-gradient-to-br from-indigo-500 to-indigo-700" },
+  { title: "ゲーム攻略本", icon: GamepadIcon, bgColor: "bg-gradient-to-br from-orange-500 to-orange-700" },
+  { title: "雑誌", icon: ScrollText, bgColor: "bg-gradient-to-br from-slate-500 to-slate-700" },
+  { title: "新書・文庫", icon: Bookmark, bgColor: "bg-gradient-to-br from-teal-500 to-teal-700" }
 ];
 
 const BookCategories = () => {
   return (
     <div className="flex flex-col min-h-screen bg-black pt-10 text-white">
-      <p className="text-center mb-10 text-xl">まだ実装中です</p>
       <div className="px-4 grid grid-cols-2 gap-4">
         {categories.map((category, index) => {
           const Icon = category.icon;
