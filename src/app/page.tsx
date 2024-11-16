@@ -5,24 +5,24 @@ import { Database } from "../../types/supabasetype";
 import { useQuery } from "@tanstack/react-query";
 
 function Simple() {
-  const queryParams = new URLSearchParams();
-  const genre = queryParams.get("genre");
+  const searchParams = new URLSearchParams(window.location.search);
+  const genre = searchParams.get("genre");
   const { data: books = [], error } = useQuery({
     queryKey: ["books", genre],
     queryFn: async () => {
-      // ローカルストレージからlikedBooksを取得
       const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
-      // likedBooksからISBNの配列を作成
       const likedBookIsbns = likedBooks.map(
         (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
       );
+
       const params = new URLSearchParams();
       if (genre) params.set("genre", genre);
-      // likedBookIsbnsが存在する場合、excludeIsbnsクエリパラメータとして追加
       if (likedBookIsbns.length > 0) {
         params.set("excludeIsbns", likedBookIsbns.join(","));
       }
-      const response = await fetch(`/api/books?${params.toString()}`);
+
+      const apiUrl = `/api/books?${params.toString()}`;
+      const response = await fetch(apiUrl);
       return response.json();
     },
   });
