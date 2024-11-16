@@ -1,11 +1,12 @@
 "use client";
 
+import { useSearchParams } from "next/navigation";
 import { BookList } from "../components/BookList";
 import { Database } from "../../types/supabasetype";
 import { useQuery } from "@tanstack/react-query";
 
 function Simple() {
-  const searchParams = new URLSearchParams(window.location.search);
+  const searchParams = useSearchParams();
   const genre = searchParams.get("genre");
   const { data: books = [], error } = useQuery({
     queryKey: ["books", genre],
