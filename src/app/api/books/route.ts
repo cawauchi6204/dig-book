@@ -50,23 +50,3 @@ export async function GET(request: Request) {
     )
   }
 }
-
-// 新しい本を作成するPOSTエンドポイント
-export async function POST(request: Request) {
-  try {
-    const body = await request.json()
-    const book = await prisma.books.create({
-      data: {
-        title: body.title,
-        author: body.author,
-        isbn: body.isbn,
-      }
-    })
-    return NextResponse.json(book, { status: 201 })
-  } catch (error) {
-    return NextResponse.json(
-      { error: `Internal Server Error: ${error}` },
-      { status: 500 }
-    )
-  }
-}
