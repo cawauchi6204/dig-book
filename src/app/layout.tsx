@@ -4,6 +4,7 @@ import BottomBar from "@/components/BottomBar";
 import Header from "../components/Header";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import TanstackQueryProvider from "./provider/TanstackQueryProvider";
+import { Suspense } from "react";
 
 export const metadata: Metadata = {
   title: "DigBook",
@@ -21,9 +22,11 @@ export default function RootLayout({
         <Header />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_TRACKING_ID!} />
         <main className="flex-1">
-          <TanstackQueryProvider>
-            {children}
-          </TanstackQueryProvider>
+          <Suspense fallback={<div>Loading...</div>}>
+            <TanstackQueryProvider>
+              {children}
+            </TanstackQueryProvider>
+          </Suspense>
         </main>
         <BottomBar />
       </body>
