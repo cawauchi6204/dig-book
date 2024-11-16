@@ -16,7 +16,7 @@ import {
 import Link from "next/link";
 
 // カテゴリーの型定義
-type Category = {
+type Genre = {
   id: string;
   title: string;
   title_en: string;
@@ -25,7 +25,7 @@ type Category = {
 };
 
 // カテゴリーデータ
-const categories: Category[] = [
+const categories: Genre[] = [
   {
     id: "literature_criticism",
     title: "文学・評論",
@@ -116,15 +116,15 @@ const BookCategories = () => {
   return (
     <div className="flex flex-col min-h-screen bg-black pt-10 text-white">
       <div className="px-4 grid grid-cols-2 gap-4">
-        {categories.map((category) => {
-          const Icon = category.icon;
+        {categories.map((genre) => {
+          const Icon = genre.icon;
           return (
             <Link
-              key={category.id}
-              href={`/?category=${category.id}`}
-              className={`${category.bgColor} rounded-xl p-4 aspect-[1.6/1] relative overflow-hidden cursor-pointer`}
+              key={genre.id}
+              href={`/?genre=${genre.id}`}
+              className={`${genre.bgColor} rounded-xl p-4 aspect-[1.6/1] relative overflow-hidden cursor-pointer`}
             >
-              <span className="text-xl font-bold">{category.title}</span>
+              <span className="text-xl font-bold">{genre.title}</span>
               <Icon className="absolute bottom-2 right-2 h-12 w-12 opacity-50" />
             </Link>
           );
