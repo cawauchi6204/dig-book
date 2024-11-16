@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react'
 import ProductCard from '../../components/ProductCard'
-import { Database } from '../../../database.types'
+import { Database } from '../../../types/supabasetype'
 
 const getFavoriteProducts = (): Database["public"]["Tables"]["books"]["Row"][] => {
   if (typeof window === 'undefined') return []
@@ -50,7 +50,7 @@ export default function FavoritesPage() {
         ) : (
           <div className="grid grid-cols-3 gap-4 sm:gap-6">
             {favorites.map((book) => (
-              <div key={book.id}>
+              <div key={book.isbn}>
                 <ProductCard product={book} />
               </div>
             ))}

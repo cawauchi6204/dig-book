@@ -1,7 +1,7 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import { BookCard } from "@/components/BookCard";
-import { Database } from "../../database.types";
+import { Database } from "../../types/supabasetype";
 
 type Props = {
   initialBooks: Database["public"]["Tables"]["books"]["Row"][];
@@ -18,18 +18,18 @@ export function BookList({ initialBooks }: Props) {
 
   const swiped = (direction: string, nameToDelete: string) => {
     if (direction === "up") {
-      const currentItem = data.find((item) => item.id === nameToDelete);
+      const currentItem = data.find((item) => item.isbn === nameToDelete);
       if (currentItem && currentItem.link) {
         window.open(currentItem.link, "_blank");
       }
     } else if (direction === "right") {
       const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
-      const currentItem = data.find((item) => item.id === nameToDelete);
+      const currentItem = data.find((item) => item.isbn === nameToDelete);
       if (
         currentItem &&
         !likedBooks.some(
           (item: Database["public"]["Tables"]["books"]["Row"]) =>
-            item.id === currentItem.id
+            item.isbn === currentItem.isbn
         )
       ) {
         likedBooks.push(currentItem);
@@ -85,7 +85,7 @@ export function BookList({ initialBooks }: Props) {
     <>
       {data.map((character) => (
         <BookCard
-          key={character.id}
+          key={character.isbn}
           character={character}
           flipped={flipped}
           onSwipe={swiped}

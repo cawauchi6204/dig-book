@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { BookList } from "../components/BookList";
 import { createClient } from "./utils/supabase/client";
-import { Database } from "../../database.types";
+import { Database } from "../../types/supabasetype";
 
 function Simple() {
   const [books, setBooks] = useState<
@@ -14,14 +14,14 @@ function Simple() {
   useEffect(() => {
     const fetchBooks = async () => {
       const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
-      const likedBookIds = likedBooks.map(
-        (book: Database["public"]["Tables"]["books"]["Row"]) => book.id
+      const likedBookIsbns = likedBooks.map(
+        (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
       );
 
       let query = supabase.from("books").select();
 
-      if (likedBookIds.length > 0) {
-        query = query.filter("id", "not.in", `(${likedBookIds.join(",")})`);
+      if (likedBookIsbns.length > 0) {
+        query = query.filter("isbn", "not.in", `(${likedBookIsbns.join(",")})`);
       }
 
       const { data, error } = await query;

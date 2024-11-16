@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { Database } from "../../database.types";
+import { Database } from "../../types/supabasetype";
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
@@ -10,7 +10,7 @@ interface ProductCardProps {
 export default function ProductCard({ product, onRemove }: ProductCardProps) {
   const handleRemove = (e: React.MouseEvent) => {
     e.preventDefault();
-    onRemove?.(product.id);
+    onRemove?.(product.isbn);
   };
 
   return (

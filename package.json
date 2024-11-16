@@ -6,7 +6,8 @@
     "dev": "rm -rf .next/cache && next dev -p 4000",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "gen-type": "mkdir -p types && source .env && npx supabase gen types typescript --project-id $SUPABASE_PROJECT_ID > types/supabasetype.ts"
   },
   "dependencies": {
     "@next/third-parties": "15.0.4-canary.4",
@@ -32,6 +33,7 @@
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "dotenv-cli": "^7.4.2",
     "eslint": "^8",
     "eslint-config-next": "15.0.3",
     "postcss": "^8.4.47",

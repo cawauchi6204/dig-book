@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
-import { Database } from "../../database.types";
+import { Database } from "../../types/supabasetype";
 
-// 新しいスタイルシートをインポート
 import styles from "./BookCard.module.css";
 
 interface BookCardProps {
@@ -39,18 +38,18 @@ export const BookCard: React.FC<BookCardProps> = ({
   return (
     <TinderCard
       className={styles.tinderCard}
-      key={character.id}
-      onSwipe={(dir) => handleSwipe(dir, character.id)}
-      onCardLeftScreen={() => onCardLeftScreen(character.id)}
+      key={character.isbn}
+      onSwipe={(dir) => handleSwipe(dir, character.isbn)}
+      onCardLeftScreen={() => onCardLeftScreen(character.isbn)}
       swipeRequirementType="position"
       swipeThreshold={10}
       preventSwipe={["up", "down"]}
     >
       <div
-        onClick={(e) => onInteraction(character.id, e)}
-        onTouchStart={(e) => onInteraction(character.id, e)}
+        onClick={(e) => onInteraction(character.isbn, e)}
+        onTouchStart={(e) => onInteraction(character.isbn, e)}
         className={`${styles.card} ${
-          flipped[character.id] ? styles.flipped : ""
+          flipped[character.isbn] ? styles.flipped : ""
         }`}
       >
         {/* Likeの表示 */}
@@ -70,7 +69,7 @@ export const BookCard: React.FC<BookCardProps> = ({
           onClick={(e) => {
             // カードが裏面の時は、クリックイベントの伝播を止めて
             // カード全体のクリックイベントが発火するのを防ぐ
-            if (flipped[character.id]) {
+            if (flipped[character.isbn]) {
               e.stopPropagation();
             }
           }}
