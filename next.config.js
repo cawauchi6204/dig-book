@@ -7,6 +7,12 @@ const nextConfig = {
         protocol: "https",
         hostname: "labplhompumzwpzizkgl.supabase.co",
       },
+      {
+        protocol: 'https',
+        hostname: 'thumbnail.image.rakuten.co.jp',
+        port: '',
+        pathname: '/**',
+      },
     ],
   },
 };
