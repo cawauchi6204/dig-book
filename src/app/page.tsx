@@ -1,41 +1,35 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import { BookList } from "../components/BookList";
-import { createClient } from "./utils/supabase/client";
 import { Database } from "../../types/supabasetype";
+import { useQuery } from "@tanstack/react-query";
 
 function Simple() {
-  const [books, setBooks] = useState<
-    Database["public"]["Tables"]["books"]["Row"][]
-  >([]);
-  const supabase = createClient();
-
-  useEffect(() => {
-    const fetchBooks = async () => {
+  const queryParams = new URLSearchParams();
+  const genre = queryParams.get("genre");
+  const { data: books = [], error } = useQuery({
+    queryKey: ["books", genre],
+    queryFn: async () => {
+      // ローカルストレージからlikedBooksを取得
       const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
+      // likedBooksからISBNの配列を作成
       const likedBookIsbns = likedBooks.map(
         (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
       );
-
-      let query = supabase.from("books").select();
-
+      const params = new URLSearchParams();
+      if (genre) params.set("genre", genre);
+      // likedBookIsbnsが存在する場合、excludeIsbnsクエリパラメータとして追加
       if (likedBookIsbns.length > 0) {
-        query = query.filter("isbn", "not.in", `(${likedBookIsbns.join(",")})`);
+        params.set("excludeIsbns", likedBookIsbns.join(","));
       }
+      const response = await fetch(`/api/books?${params.toString()}`);
+      return response.json();
+    },
+  });
 
-      const { data, error } = await query;
-
-      if (error) {
-        console.error("Error fetching books:", error);
-        return;
-      }
-
-      setBooks(data || []);
-    };
-
-    fetchBooks();
-  }, [supabase]);
+  if (error) {
+    console.error("Error fetching books:", error);
+  }
 
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">

@@ -8,15 +8,25 @@ export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url)
     const genre = searchParams.get('genre')
+    const excludeIsbns = searchParams.get('excludeIsbns')
 
     const books = await prisma.books.findMany({
-      where: genre ? {
-        book_genres: {
-          some: {
-            genre_id: genre
-          }
-        }
-      } : undefined,
+      where: {
+        AND: [
+          genre ? {
+            book_genres: {
+              some: {
+                genre_id: genre
+              }
+            }
+          } : {},
+          excludeIsbns ? {
+            isbn: {
+              notIn: excludeIsbns.split(',')
+            }
+          } : {}
+        ]
+      },
       include: {
         book_genres: {
           include: {
