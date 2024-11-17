@@ -88,10 +88,6 @@ async function fetchBooksFromRakuten(
   try {
     const response = await fetch(url);
     const data = await response.json();
-    // console.log(
-    //   `ページ ${page} の楽天APIレスポンス:`,
-    //   JSON.stringify(data, null, 2)
-    // );
     const items = (data as { Items: { Item: RakutenBook }[] }).Items.map(
       (item) => item.Item
     );
@@ -158,7 +154,6 @@ async function insertBooks(books: RakutenBook[]) {
           ? book.largeImageUrl.replace(/_ex=\d+x\d+/, "_ex=1200x1200")
           : null;
 
-        console.log("🚀 ~ insertBooks ~ bookData:", book);
         // すべての必須フィールドが存在するか確認
         const genres = processGenreIds(book.booksGenreId);
 
@@ -175,14 +170,14 @@ async function insertBooks(books: RakutenBook[]) {
 
         // いずれかの値がnullの場合はスキップ
         if (Object.values(bookData).includes(null)) {
-          // console.log(
-          //   `必須フィールドが不足しているため、以下の本をスキップします:`,
-          //   book.title
-          // );
+          console.log(
+            `必須フィールドが不足しているため、以下の本をスキップします:`,
+            book.title
+          );
           continue;
         }
 
-        // console.log("挿入するデータ:", bookData);
+        console.log("挿入するデータ:", bookData);
         console.log("ジャンル:", genres);
 
         const { data: bookResult, error } = await supabase
@@ -221,7 +216,7 @@ async function insertBooks(books: RakutenBook[]) {
 
 async function main() {
   const genreId = "001005006";
-  const totalPages = 20; // 取得したいページ数を指定
+  const totalPages = 30; // 取得したいページ数を指定
 
   for (let page = 1; page <= totalPages; page++) {
     console.log(`ページ ${page} の処理を開始`);
