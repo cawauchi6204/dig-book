@@ -121,6 +121,12 @@ async function insertBooks(books: RakutenBook[]) {
         continue;
       }
 
+// 画像がnoimageの場合はスキップ
+      if (book.largeImageUrl && book.largeImageUrl.includes("noimage")) {
+        console.log("画像がnoimageのため、以下の本をスキップします:", book.title);
+        continue;
+      }
+
       const { data: existingBook } = await supabase
         .from("books")
         .select()
@@ -215,13 +221,13 @@ async function insertBooks(books: RakutenBook[]) {
 }
 
 async function main() {
-  const genreId = "001005006";
-  const totalPages = 30; // 取得したいページ数を指定
+  const genreId = "001006004";
+  const totalPages = 50; // 取得したいページ数を指定
 
   for (let page = 1; page <= totalPages; page++) {
     console.log(`ページ ${page} の処理を開始`);
     const books = await fetchBooksFromRakuten(genreId, page);
-    await insertBooks(books.slice(0, 1));
+    await insertBooks(books);
     // APIの制限を考慮して、リクエスト間に少し待機時間を入れる
     if (page < totalPages) {
       await new Promise((resolve) => setTimeout(resolve, 1000));
