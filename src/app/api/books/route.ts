@@ -52,6 +52,10 @@ export async function GET(request: Request) {
           },
         },
       },
+      orderBy: {
+        published_at: "desc",
+      },
+      take: 100,
     });
     return NextResponse.json(books);
   } catch (error) {

@@ -5,9 +5,10 @@ import { Database } from "../../types/supabasetype";
 
 type Props = {
   initialBooks: Database["public"]["Tables"]["books"]["Row"][];
+  onEmpty: () => Promise<Database["public"]["Tables"]["books"]["Row"][]>;
 };
 
-export function BookList({ initialBooks }: Props) {
+export function BookList({ initialBooks, onEmpty }: Props) {
   const [data, setData] = useState(initialBooks);
 
   useEffect(() => {
@@ -38,8 +39,20 @@ export function BookList({ initialBooks }: Props) {
     }
   };
 
-  const outOfFrame = (name: string) => {
+  const outOfFrame = async (name: string) => {
     console.log(name + " left the screen!");
+    
+    const nextData = data.filter(item => item.isbn !== name);
+    setData(nextData);
+
+    if (nextData.length === 0) {
+      try {
+        const newBooks = await onEmpty();
+        setData(newBooks);
+      } catch (error) {
+        console.error('新しい本の取得に失敗しました:', error);
+      }
+    }
   };
 
   const handleClick = (id: string) => {

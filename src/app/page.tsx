@@ -5,9 +5,11 @@ import { Database } from "../../types/supabasetype";
 import { useQuery } from "@tanstack/react-query";
 
 function Simple() {
-  const queryParams = new URLSearchParams();
+  const queryParams = typeof window !== 'undefined' 
+    ? new URLSearchParams(window.location.search)
+    : new URLSearchParams();
   const genre = queryParams.get("genre");
-  const { data: books = [], error } = useQuery({
+  const { data: books = [], error, refetch } = useQuery({
     queryKey: ["books", genre],
     queryFn: async () => {
       // ローカルストレージからlikedBooksを取得
@@ -28,16 +30,28 @@ function Simple() {
       const response = await fetch(apiUrl);
       return response.json();
     },
+    staleTime: 0,
+    gcTime: 0,
+    refetchOnWindowFocus: false,
   });
 
   if (error) {
     console.error("Error fetching books:", error);
   }
 
+  const handleEmpty = async () => {
+    console.log('Cards empty, fetching new books...');
+    const result = await refetch();
+    return result.data || [];
+  };
+
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
-        <BookList initialBooks={books} />
+        <BookList 
+          initialBooks={books} 
+          onEmpty={handleEmpty}
+        />
       </div>
     </div>
   );
