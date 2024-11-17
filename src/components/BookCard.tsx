@@ -41,8 +41,8 @@ export const BookCard: React.FC<BookCardProps> = ({
       className={styles.tinderCard}
       key={character.isbn}
       onSwipe={(dir) => handleSwipe(dir, character.isbn)}
-      swipeRequirementType="velocity"
-      swipeThreshold={0.4}
+      swipeRequirementType="position"
+      swipeThreshold={1}
       preventSwipe={["up", "down"]}
     >
       <div
