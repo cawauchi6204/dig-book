@@ -60,7 +60,7 @@ export async function GET(request: Request) {
       orderBy: {
         published_at: "desc",
       },
-      take: 30,
+      take: 3,
     });
     return NextResponse.json(books);
   } catch (error) {
