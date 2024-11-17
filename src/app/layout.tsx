@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import BottomBar from "@/components/BottomBar";
-import Header from "../components/Header";
 import { GoogleAnalytics } from "@next/third-parties/google";
 import TanstackQueryProvider from "./provider/TanstackQueryProvider";
 import { Suspense } from "react";
@@ -19,7 +18,6 @@ export default function RootLayout({
   return (
     <html lang="ja">
       <body className="flex flex-col min-h-screen">
-        <Header />
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_TRACKING_ID!} />
         <main className="flex-1">
           <Suspense fallback={<div>Loading...</div>}>
