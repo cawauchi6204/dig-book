@@ -5,11 +5,16 @@ import { Database } from "../../types/supabasetype";
 import { useQuery } from "@tanstack/react-query";
 
 function Simple() {
-  const queryParams = typeof window !== 'undefined' 
-    ? new URLSearchParams(window.location.search)
-    : new URLSearchParams();
+  const queryParams =
+    typeof window !== "undefined"
+      ? new URLSearchParams(window.location.search)
+      : new URLSearchParams();
   const genre = queryParams.get("genre");
-  const { data: books = [], error, refetch } = useQuery({
+  const {
+    data: books = [],
+    error,
+    refetch,
+  } = useQuery({
     queryKey: ["books", genre],
     queryFn: async () => {
       try {
@@ -38,19 +43,18 @@ function Simple() {
           (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
         );
 
-        const params = new URLSearchParams();
-        if (genre) params.set("genre", genre);
-        if (likedBookIsbns.length > 0) {
-          params.set("excludeIsbns", likedBookIsbns.join(","));
-        }
-        if (nopeBookIsbns.length > 0) {
-          params.set("nopeIsbns", nopeBookIsbns.join(","));
-        }
+        const response = await fetch("/api/books", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            genre: genre || undefined,
+            excludeIsbns: likedBookIsbns,
+            nopeIsbns: nopeBookIsbns,
+          }),
+        });
 
-        // APIのベースURLを明示的に指定
-        const apiUrl = `/api/books?${params.toString()}`;
-        console.log("API URL:", apiUrl);  // デバッグ用
-        const response = await fetch(apiUrl);
         return response.json();
       } catch (error) {
         console.error("Error in queryFn:", error);
@@ -68,7 +72,7 @@ function Simple() {
   }
 
   const handleEmpty = async () => {
-    console.log('Cards empty, fetching new books...');
+    console.log("Cards empty, fetching new books...");
     const result = await refetch();
     return result.data || [];
   };
@@ -76,10 +80,7 @@ function Simple() {
   return (
     <div className="h-screen overflow-hidden bg-gradient-to-b from-gray-100 to-gray-200">
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
-        <BookList 
-          initialBooks={books}
-          onEmpty={handleEmpty}
-        />
+        <BookList initialBooks={books} onEmpty={handleEmpty} />
       </div>
     </div>
   );

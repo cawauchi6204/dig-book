@@ -10,13 +10,11 @@ if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
 
-// 全ての本を取得するGETエンドポイント
-export async function GET(request: Request) {
+// 本を取得するPOSTエンドポイント
+export async function POST(request: Request) {
   try {
-    const { searchParams } = new URL(request.url);
-    const genre = searchParams.get("genre");
-    const excludeIsbns = searchParams.get("excludeIsbns");
-    const nopeIsbns = searchParams.get("nopeIsbns");
+    const body = await request.json();
+    const { genre, excludeIsbns = [], nopeIsbns = [] } = body;
 
     const whereCondition: {
       book_genres?: {
@@ -37,10 +35,7 @@ export async function GET(request: Request) {
       };
     }
 
-    const isbnExcludeList = [
-      ...(excludeIsbns ? excludeIsbns.split(",") : []),
-      ...(nopeIsbns ? nopeIsbns.split(",") : [])
-    ];
+    const isbnExcludeList = [...excludeIsbns, ...nopeIsbns];
 
     if (isbnExcludeList.length > 0) {
       whereCondition.isbn = {
