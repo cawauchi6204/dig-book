@@ -14,7 +14,7 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
   };
 
   return (
-    <a href={`${product.link}`}>
+    <a href={`${product.link}`} target="_blank" rel="noopener noreferrer">
       <div className="transition-transform flex flex-col items-center w-full relative">
         {onRemove && (
           <button
