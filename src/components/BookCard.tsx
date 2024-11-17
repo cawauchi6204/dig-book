@@ -33,6 +33,7 @@ export const BookCard: React.FC<BookCardProps> = ({
         : dir;
     setDragDirection(normalizedDir);
     onSwipe(normalizedDir, id);
+    onCardLeftScreen(id);
   };
 
   return (
@@ -40,9 +41,8 @@ export const BookCard: React.FC<BookCardProps> = ({
       className={styles.tinderCard}
       key={character.isbn}
       onSwipe={(dir) => handleSwipe(dir, character.isbn)}
-      onCardLeftScreen={() => onCardLeftScreen(character.isbn)}
-      swipeRequirementType="position"
-      swipeThreshold={10}
+      swipeRequirementType="velocity"
+      swipeThreshold={0.4}
       preventSwipe={["up", "down"]}
     >
       <div

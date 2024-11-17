@@ -81,10 +81,10 @@ async function insertBooks(books: RakutenBook[]) {
           ? book.largeImageUrl.replace(/_ex=\d+x\d+/, "_ex=1200x1200")
           : null;
 
-        // 挿入前にデータの存在を確認
+        // すべての必須フィールドが存在するか確認
         const bookData = {
           isbn: book.isbn,
-          title: book.title || "不明",
+          title: book.title || null,
           author: book.author || null,
           price: book.itemPrice || null,
           cover: cover,
@@ -93,7 +93,13 @@ async function insertBooks(books: RakutenBook[]) {
           published_at: published_at,
         };
 
-        console.log("挿入するデータ:", bookData); // デバッグ用
+        // いずれかの値がnullの場合はスキップ
+        if (Object.values(bookData).includes(null)) {
+          console.log(`必須フィールドが不足しているため、以下の本をスキップします:`, book.title);
+          continue;
+        }
+
+        console.log("挿入するデータ:", bookData);
 
         const { error } = await supabase.from("books").insert(bookData);
 
@@ -110,7 +116,7 @@ async function insertBooks(books: RakutenBook[]) {
 
 async function main() {
   const genreId = "001006";
-  const totalPages = 20; // 取得したいページ数を指定
+  const totalPages = 40; // 取得したいページ数を指定
 
   for (let page = 1; page <= totalPages; page++) {
     console.log(`ページ ${page} の処理を開始`);
