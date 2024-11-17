@@ -9,120 +9,52 @@ export interface Genre {
   level: number;
 }
 
-// reverseGenreMappingの型を定義
-type GenreMapping = {
-  [key: string]: string;
-};
+function getCategory(genreId: string): string {
+  // 最初の3-6桁を取得して判定
+  const baseId = genreId.slice(0, 6);
 
-// オブジェクトに型を付与
-export const reverseGenreMapping: GenreMapping = {
-  // 文学・評論 (Literature & Criticism)
-  "001004008": "literature_criticism",
-  "001004009": "literature_criticism",
-  "001004003": "literature_criticism",
-  "005402001": "literature_criticism",
-  "005402002": "literature_criticism",
-  "005402004": "literature_criticism",
-  "005402005": "literature_criticism",
-  "005402006": "literature_criticism",
+  // 本（001）のカテゴリー
+  if (baseId.startsWith("001")) {
+    const subCategory = baseId.slice(3, 6);
 
-  // 人文・思想 (Philosophy & Thought)
-  "001008": "philosophy_thought",
-  "005406003": "philosophy_thought",
-  "005406004": "philosophy_thought",
+    // 各カテゴリーの判定
+    if (subCategory === "001") return "comics_manga"; // 漫画（コミック）
+    if (subCategory === "003") return "children_books"; // 絵本・児童書・図鑑
+    if (subCategory === "004") return "literature_criticism"; // 小説・エッセイ
+    if (subCategory === "005") return "computer_it"; // パソコン・システム開発
+    if (subCategory === "006") return "business_economics"; // ビジネス・経済・就職
+    if (subCategory === "016") return "career_certification"; // 資格・検定
+    if (subCategory === "017") return "light_novels"; // ライトノベル
+    if (subCategory === "018") return "sheet_music_scores"; // 楽譜
+    if (subCategory === "019") return "paperbacks_novels"; // 文庫
+    if (subCategory === "020") return "paperbacks_novels"; // 新書
+    if (subCategory === "010") return "lifestyle_health_parenting"; // 美容・暮らし・健康・料理
+    if (subCategory === "011" && genreId.includes("005")) return "game_guides"; // ゲーム攻略本
+  }
 
-  // 社会・政治･法律 (Society, Politics & Law)
-  "005406005": "society_politics_law",
-  "005406008": "society_politics_law",
-  "005406002": "society_politics_law",
+  // 洋書（005）のカテゴリー
+  if (baseId.startsWith("005")) {
+    const subCategory = baseId.slice(3, 6);
 
-  // ノンフィクション (Non-fiction)
-  "001004004": "non_fiction",
+    if (subCategory === "402") return "literature_criticism"; // Fiction & Literature
+    if (subCategory === "403") return "business_economics"; // Business & Self-Culture
+    if (subCategory === "404" && genreId.includes("009")) return "comics_manga"; // Comics & Graphic Novels
+    if (subCategory === "405" && genreId.includes("001")) return "computer_it"; // Computers
+    if (subCategory === "407") return "children_books"; // Books for kids
+  }
 
-  // 歴史・地理 (History & Geography)
-  "005406001": "history_geography",
+  // 雑誌（007）のカテゴリー
+  if (baseId.startsWith("007")) {
+    return "magazines"; // すべての雑誌は'magazines'カテゴリーに
+  }
 
-  // ビジネス・経済 (Business & Economics)
-  "001006001": "business_economics",
-  "001006002": "business_economics",
-  "001006018": "business_economics",
-  "001006019": "business_economics",
-  "005403001": "business_economics",
+  // デフォルトカテゴリーまたは該当なしの場合
+  return "";
+}
 
-  // 投資・金融・会社経営 (Investment, Finance & Management)
-  "001006005": "investment_finance_management",
-  "001006024": "investment_finance_management",
-  "001006007": "investment_finance_management",
-
-  // 科学・テクノロジー (Science & Technology)
-  "001012": "science_technology",
-  "005405005": "science_technology",
-  "005405006": "science_technology",
-
-  // 医学・薬学・看護学・歯科学 (Medicine & Healthcare)
-  "005405003": "medicine_healthcare",
-
-  // コンピュータ・IT (Computer & IT)
-  "001005": "computer_it",
-  "005405001": "computer_it",
-
-  // アート・建築・デザイン (Art, Architecture & Design)
-  "005401001": "art_architecture_design",
-  "005401002": "art_architecture_design",
-  "005401003": "art_architecture_design",
-
-  // 趣味・実用 (Hobbies & Practical)
-  "001009": "hobbies_practical",
-  "005401004": "hobbies_practical",
-
-  // スポーツ・アウトドア (Sports & Outdoors)
-  "005404008": "sports_outdoors",
-
-  // 資格・検定・就職 (Career & Certification)
-  "001006010": "career_certification",
-  "001006013": "career_certification",
-  "001006014": "career_certification",
-  "001006015": "career_certification",
-  "001006016": "career_certification",
-
-  // 暮らし・健康・子育て (Lifestyle, Health & Parenting)
-  "005404003": "lifestyle_health_parenting",
-  "005404005": "lifestyle_health_parenting",
-  "005404006": "lifestyle_health_parenting",
-
-  // 旅行ガイド・マップ (Travel Guides & Maps)
-  "005409002": "travel_guides_maps",
-
-  // 語学・辞事典・年鑑 (Language & Reference)
-  "005408003": "language_reference",
-  "005408004": "language_reference",
-
-  // 教育・学参・受験 (Education & Study Guides)
-  "005404002": "education_study_guides",
-  "005408002": "education_study_guides",
-
-  // 絵本・児童書 (Children's Books)
-  "005407001": "children_books",
-  "005407002": "children_books",
-
-  // コミック (Comics & Manga)
-  "001001": "comics_manga",
-  "005404009": "comics_manga",
-
-  // ライトノベル (Light Novels)
-  "001017": "light_novels",
-
-  // 雑誌 (Magazines)
-  "007": "magazines",
-} as const;
-
-// 型定義
-// type RakutenGenreId = keyof typeof reverseGenreMapping;
-// type NewGenreId = typeof reverseGenreMapping[RakutenGenreId];
-
-// // 変換関数
+// 既存のconvertToNewGenreId関数を更新
 const convertToNewGenreId = (rakutenGenreId: string): string => {
-  return (reverseGenreMapping[rakutenGenreId] || "");
+  return getCategory(rakutenGenreId);
 };
 
 // 下から実際につかう
@@ -156,10 +88,10 @@ async function fetchBooksFromRakuten(
   try {
     const response = await fetch(url);
     const data = await response.json();
-    console.log(
-      `ページ ${page} の楽天APIレスポンス:`,
-      JSON.stringify(data, null, 2)
-    );
+    // console.log(
+    //   `ページ ${page} の楽天APIレスポンス:`,
+    //   JSON.stringify(data, null, 2)
+    // );
     const items = (data as { Items: { Item: RakutenBook }[] }).Items.map(
       (item) => item.Item
     );
@@ -172,12 +104,16 @@ async function fetchBooksFromRakuten(
 
 // ジャンルIDを処理する関数を追加
 function processGenreIds(booksGenreId: string): string[] {
-  // /で分割し、各ジャンルIDの最初の9文字を取得してconvertToNewGenreIdを適用
-  return booksGenreId
-    .split("/")
-    .map((id) => id.slice(0, 9))
-    .map((id) => convertToNewGenreId(id))
-    .filter((id) => id !== undefined && id !== "") as string[];
+  // Setを使用して重複を排除
+  return [
+    ...new Set(
+      booksGenreId
+        .split("/")
+        .map((id) => id.slice(0, 9))
+        .map((id) => convertToNewGenreId(id))
+        .filter((id) => id !== undefined && id !== "")
+    ),
+  ] as string[];
 }
 
 async function insertBooks(books: RakutenBook[]) {
@@ -239,42 +175,42 @@ async function insertBooks(books: RakutenBook[]) {
 
         // いずれかの値がnullの場合はスキップ
         if (Object.values(bookData).includes(null)) {
-          console.log(
-            `必須フィールドが不足しているため、以下の本をスキップします:`,
-            book.title
-          );
+          // console.log(
+          //   `必須フィールドが不足しているため、以下の本をスキップします:`,
+          //   book.title
+          // );
           continue;
         }
 
-        console.log("挿入するデータ:", bookData);
+        // console.log("挿入するデータ:", bookData);
         console.log("ジャンル:", genres);
 
-        // const { data: bookResult, error } = await supabase
-        //   .from("books")
-        //   .insert(bookData)
-        //   .select()
-        //   .single();
+        const { data: bookResult, error } = await supabase
+          .from("books")
+          .insert(bookData)
+          .select()
+          .single();
 
-        // if (error) {
-        //   console.error("データの挿入に失敗:", error);
-        //   continue;
-        // }
+        if (error) {
+          console.error("データの挿入に失敗:", error);
+          continue;
+        }
 
-        // ジャンルの挿入を修正
-        // if (genres.length > 0 && bookResult) {
-        //   const genreInserts = genres.map(genre => ({
-        //     book_id: bookResult.id,
-        //     genre_id: genre
-        //   }));
+        // ジャンルの挿入
+        if (genres.length > 0 && bookResult) {
+          const genreInserts = genres.map((genre) => ({
+            book_isbn: bookResult.isbn,
+            genre_id: genre
+          }));
 
-        //   const { error: genreError } = await supabase
-        //     .from("book_genres")
-        //     .insert(genreInserts);
+          const { error: genreError } = await supabase
+            .from("book_genres")
+            .insert(genreInserts);
 
-        //   if (genreError) {
-        //     console.error("ジャンルの挿入に失敗:", genreError);
-        //   }
-        // }
+          if (genreError) {
+            console.error("ジャンルの挿入に失敗:", genreError);
+          }
+        }
       }
     } catch (error) {
       console.error("Supabaseの操作に失敗:", error);
