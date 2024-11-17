@@ -20,9 +20,9 @@ export function useBookStorage(books: Database["public"]["Tables"]["books"]["Row
     }
   };
 
-  const addToStorage = (key: string, book: Book) => {
+  const addToStorage = (key: string, book: Database["public"]["Tables"]["books"]["Row"]) => {
     const stored = JSON.parse(localStorage.getItem(key) || "[]");
-    if (!stored.some((item: Book) => item.isbn === book.isbn)) {
+    if (!stored.some((item: Database["public"]["Tables"]["books"]["Row"]) => item.isbn === book.isbn)) {
       stored.push(book);
       localStorage.setItem(key, JSON.stringify(stored));
     }

@@ -39,8 +39,12 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           <h3 className="text-xs font-semibold line-clamp-2 min-h-[2rem] leading-4">
             {product.title}
           </h3>
-          <button className="mt-2 px-4 py-1 bg-blue-500 text-white rounded-md text-sm hover:bg-blue-600 transition-colors">
-            buy amazon
+          <button className={`mt-2 px-4 py-1 text-white rounded-md text-sm transition-colors ${
+            product.link?.includes('rakuten') 
+              ? 'bg-[#BF0000] hover:bg-[#a00000]' 
+              : 'bg-blue-500 hover:bg-blue-600'
+          }`}>
+            {product.link?.includes('rakuten') ? 'buy rakuten' : 'buy amazon'}
           </button>
         </div>
       </div>
