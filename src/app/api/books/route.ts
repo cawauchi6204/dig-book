@@ -55,7 +55,7 @@ export async function POST(request: Request) {
       orderBy: {
         published_at: "desc",
       },
-      take: 20,
+      take: 10,
     });
     return NextResponse.json(books);
   } catch (error) {
