@@ -16,17 +16,19 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const genre = searchParams.get("genre");
     const excludeIsbns = searchParams.get("excludeIsbns");
-
     // whereの条件を動的に構築
-    const whereCondition = {
-      book_genres: {
-        some: {},
-      },
-      isbn: {
-        notIn: [""],
-      }
-    };
+    const whereCondition: {
+      book_genres?: {
+        some: {
+          genre_id: string;
+        };
+      };
+      isbn?: {
+        notIn: string[];
+      };
+    } = {};
 
+    // ジャンル指定がある場合のみbook_genres条件を追加
     if (genre) {
       whereCondition.book_genres = {
         some: {
