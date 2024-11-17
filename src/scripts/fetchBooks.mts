@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import fetch from "node-fetch";
+const fetch = (await import('node-fetch')).default;
 import dotenv from "dotenv";
 
 dotenv.config();
@@ -109,8 +109,8 @@ async function insertBooks(books: RakutenBook[]) {
 }
 
 async function main() {
-  const genreId = "001006";
-  const totalPages = 2; // 取得したいページ数を指定
+  const genreId = "001020";
+  const totalPages = 1; // 取得したいページ数を指定
 
   for (let page = 1; page <= totalPages; page++) {
     console.log(`ページ ${page} の処理を開始`);
