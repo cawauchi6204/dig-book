@@ -115,7 +115,7 @@ async function insertBooks(books: RakutenBook[]) {
 }
 
 async function main() {
-  const genreId = "001006";
+  const genreId = "001006004004";
   const totalPages = 40; // 取得したいページ数を指定
 
   for (let page = 1; page <= totalPages; page++) {
