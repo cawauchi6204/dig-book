@@ -12,16 +12,25 @@ function Simple() {
   const { data: books = [], error, refetch } = useQuery({
     queryKey: ["books", genre],
     queryFn: async () => {
-      // ローカルストレージからlikedBooksを取得
+      // ローカルストレージからlikedBooksとnopeBooksを取得
       const likedBooks = JSON.parse(localStorage.getItem("likedBooks") || "[]");
-      // likedBooksからISBNの配列を作成
+      const nopeBooks = JSON.parse(localStorage.getItem("nopeBooks") || "[]");
+
+      // likedBooksとnopeBooksからISBNの配列を作成
       const likedBookIsbns = likedBooks.map(
         (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
       );
+      const nopeBookIsbns = nopeBooks.map(
+        (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
+      );
+
       const params = new URLSearchParams();
       if (genre) params.set("genre", genre);
       if (likedBookIsbns.length > 0) {
         params.set("excludeIsbns", likedBookIsbns.join(","));
+      }
+      if (nopeBookIsbns.length > 0) {
+        params.set("nopeIsbns", nopeBookIsbns.join(","));
       }
 
       // APIのベースURLを明示的に指定

@@ -16,7 +16,8 @@ export async function GET(request: Request) {
     const { searchParams } = new URL(request.url);
     const genre = searchParams.get("genre");
     const excludeIsbns = searchParams.get("excludeIsbns");
-    // whereの条件を動的に構築
+    const nopeIsbns = searchParams.get("nopeIsbns");
+
     const whereCondition: {
       book_genres?: {
         some: {
@@ -28,7 +29,6 @@ export async function GET(request: Request) {
       };
     } = {};
 
-    // ジャンル指定がある場合のみbook_genres条件を追加
     if (genre) {
       whereCondition.book_genres = {
         some: {
@@ -37,9 +37,14 @@ export async function GET(request: Request) {
       };
     }
 
-    if (excludeIsbns) {
+    const isbnExcludeList = [
+      ...(excludeIsbns ? excludeIsbns.split(",") : []),
+      ...(nopeIsbns ? nopeIsbns.split(",") : [])
+    ];
+
+    if (isbnExcludeList.length > 0) {
       whereCondition.isbn = {
-        notIn: excludeIsbns.split(","),
+        notIn: isbnExcludeList
       };
     }
 
