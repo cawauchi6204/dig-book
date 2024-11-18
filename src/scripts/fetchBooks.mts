@@ -56,6 +56,14 @@ function getCategory(genreId: string): string {
 const convertToNewGenreId = (rakutenGenreId: string): string => {
   return getCategory(rakutenGenreId);
 };
+// ジャンルIDからlanguageを取得
+const getLanguage = (rakutenGenreId: string): string => {
+  // ジャンルが005の場合は英語
+  if (rakutenGenreId.startsWith("005")) {
+    return "en";
+  }
+  return "ja";
+};
 
 // 下から実際につかう
 
@@ -134,7 +142,7 @@ async function insertBooks(books: RakutenBook[]) {
         .single();
 
       if (!existingBook) {
-        let published_at = null;
+        let published_at: string | null = null;
         if (book.salesDate) {
           // 日付文字列から年月日以外の文字を除去
           const dateStr = book.salesDate
@@ -172,6 +180,7 @@ async function insertBooks(books: RakutenBook[]) {
           link: book.itemUrl || null,
           content: book.itemCaption || null,
           published_at: published_at,
+          language: getLanguage(book.booksGenreId),
         };
 
         // いずれかの値がnullの場合はスキップ
@@ -221,8 +230,8 @@ async function insertBooks(books: RakutenBook[]) {
 }
 
 async function main() {
-  const genreId = "001006004";
-  const totalPages = 50; // 取得したいページ数を指定
+  const genreId = "001006018003";
+  const totalPages = 200; // 取得したいページ数を指定
 
   for (let page = 1; page <= totalPages; page++) {
     console.log(`ページ ${page} の処理を開始`);

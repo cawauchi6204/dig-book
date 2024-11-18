@@ -1,7 +1,7 @@
-import BookCategories from "@/components/BookCategories";
+import BookGenres from "@/components/BookGenres";
 
-const CategoriesPage = () => {
-  return <BookCategories />;
+const GenresPage = () => {
+  return <BookGenres />;
 };
 
-export default CategoriesPage;
+export default GenresPage;

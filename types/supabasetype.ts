@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      _prisma_migrations: {
+        Row: {
+          applied_steps_count: number
+          checksum: string
+          finished_at: string | null
+          id: string
+          logs: string | null
+          migration_name: string
+          rolled_back_at: string | null
+          started_at: string
+        }
+        Insert: {
+          applied_steps_count?: number
+          checksum: string
+          finished_at?: string | null
+          id: string
+          logs?: string | null
+          migration_name: string
+          rolled_back_at?: string | null
+          started_at?: string
+        }
+        Update: {
+          applied_steps_count?: number
+          checksum?: string
+          finished_at?: string | null
+          id?: string
+          logs?: string | null
+          migration_name?: string
+          rolled_back_at?: string | null
+          started_at?: string
+        }
+        Relationships: []
+      }
       book_genres: {
         Row: {
           book_isbn: string
@@ -46,6 +79,7 @@ export type Database = {
           cover: string | null
           created_at: string | null
           isbn: string
+          language: Database["public"]["Enums"]["language"]
           link: string | null
           price: number | null
           published_at: string | null
@@ -57,6 +91,7 @@ export type Database = {
           cover?: string | null
           created_at?: string | null
           isbn: string
+          language?: Database["public"]["Enums"]["language"]
           link?: string | null
           price?: number | null
           published_at?: string | null
@@ -68,6 +103,7 @@ export type Database = {
           cover?: string | null
           created_at?: string | null
           isbn?: string
+          language?: Database["public"]["Enums"]["language"]
           link?: string | null
           price?: number | null
           published_at?: string | null
@@ -101,7 +137,7 @@ export type Database = {
       [_ in never]: never
     }
     Enums: {
-      [_ in never]: never
+      language: "ja" | "en" | "fr"
     }
     CompositeTypes: {
       [_ in never]: never
