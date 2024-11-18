@@ -5,7 +5,22 @@ import { NextResponse } from "next/server";
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;
 };
-const prisma = new PrismaClient();
+const prisma = new PrismaClient({
+  log: [
+    {
+      emit: "event",
+      level: "query",
+    },
+  ],
+});
+
+// SQLクエリのログ出力設定
+prisma.$on("query", (e) => {
+  console.log("Query: " + e.query);
+  console.log("Params: " + e.params);
+  console.log("Duration: " + e.duration + "ms");
+});
+
 if (process.env.NODE_ENV !== "production") {
   globalForPrisma.prisma = prisma;
 }
