@@ -14,6 +14,7 @@ const nextConfig = {
         pathname: '/**',
       },
     ],
+    domains: ['dig-book.vercel.app'],
   },
 };
 

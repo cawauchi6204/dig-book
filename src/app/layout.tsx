@@ -8,6 +8,28 @@ import { Suspense } from "react";
 export const metadata: Metadata = {
   title: "DigBook",
   description: "Your digital bookshelf companion",
+  openGraph: {
+    title: "DigBook",
+    description: "Your digital bookshelf companion",
+    url: "https://dig-book.vercel.app",
+    siteName: "DigBook",
+    images: [
+      {
+        url: "/assets/ogp.png", // OGP画像のURL
+        width: 1200,
+        height: 630,
+        alt: "DigBook - Your digital bookshelf companion",
+      },
+    ],
+    locale: "ja_JP",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DigBook",
+    description: "Your digital bookshelf companion",
+    images: ["/assets/ogp.png"], // OGP画像のURL
+  },
 };
 
 export default function RootLayout({
