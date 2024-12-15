@@ -5,6 +5,8 @@ import ProductCard from '../../components/ProductCard'
 import { Database } from '../../../types/supabasetype'
 import { genres } from '../constants/genres'
 
+export const runtime = 'edge';
+
 type Book = Database["public"]["Tables"]["books"]["Row"] & { book_genres: Database["public"]["Tables"]["book_genres"]["Row"][] }
 
 const getFavoriteProducts = (): Book[] => {

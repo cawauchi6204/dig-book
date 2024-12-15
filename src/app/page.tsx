@@ -4,6 +4,8 @@ import { BookList } from "../components/BookList";
 import { Database } from "../../types/supabasetype";
 import { useQuery } from "@tanstack/react-query";
 
+export const runtime = 'edge';
+
 function Simple() {
   const queryParams =
     typeof window !== "undefined"
