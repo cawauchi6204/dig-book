@@ -28,7 +28,17 @@ if (process.env.NODE_ENV !== "production") {
 // 本を取得するPOSTエンドポイント
 export async function POST(request: Request) {
   try {
+    // リクエストボディの検証
+    if (!request.body) {
+      return NextResponse.json(
+        { error: "リクエストボディが必要です" },
+        { status: 400 }
+      );
+    }
+
     const body = await request.json();
+
+    // 必要なパラメータの検証
     const { genre, excludeIsbns = [], nopeIsbns = [] } = body;
 
     const whereCondition: {
@@ -50,7 +60,7 @@ export async function POST(request: Request) {
       };
     }
 
-    const isbnExcludeList = [...excludeIsbns, ...nopeIsbns];
+    const isbnExcludeList = [...excludeIsbns, ...nopeIsbns].filter(Boolean); // nullやundefinedを除外
 
     if (isbnExcludeList.length > 0) {
       whereCondition.isbn = {
@@ -58,6 +68,7 @@ export async function POST(request: Request) {
       };
     }
 
+    // クエリの実行
     const books = await prisma.books.findMany({
       where: whereCondition,
       include: {
@@ -72,10 +83,20 @@ export async function POST(request: Request) {
       },
       take: 10,
     });
+
+    if (!books) {
+      return NextResponse.json(
+        { error: "本が見つかりませんでした" },
+        { status: 404 }
+      );
+    }
+
     return NextResponse.json(books);
+
   } catch (error) {
+    console.error("Error details:", error); // エラーの詳細をログ出力
     return NextResponse.json(
-      { error: `Internal Server Error: ${error}` },
+      { error: `サーバーエラーが発生しました: ${error instanceof Error ? error.message : String(error)}` },
       { status: 500 }
     );
   }
