@@ -14,7 +14,8 @@
     "sync-supabase": "pnpm gen-type && pnpm db:pull",
     "scripts": "NODE_OPTIONS=\"--loader ts-node/esm\" ts-node --esm --project tsconfig.scripts.json",
     "build:cf": "npx @cloudflare/next-on-pages@1",
-    "start:cf": "npx wrangler pages dev ./.vercel/output/static --compatibility-flags nodejs_compat"
+    "start:cf": "npx wrangler pages dev ./.vercel/output/static --compatibility-flags nodejs_compat",
+    "pages:build": "next build && npx @cloudflare/next-on-pages@1"
   },
   "dependencies": {
     "@next/third-parties": "15.0.4-canary.4",
@@ -53,5 +54,9 @@
     "tailwindcss": "^3.4.14",
     "ts-node": "^10.9.1",
     "typescript": "^5"
+  },
+  "engines" : {
+    "node": ">=18.17.0",
+    "pnpm": ">=8.7.0"
   }
 }
