@@ -180,7 +180,7 @@ async function insertBooks(books: RakutenBook[]) {
           author: book.author || null,
           price: book.itemPrice || null,
           cover: cover,
-          link: book.itemUrl || null,
+          rakuten_link: book.itemUrl || null,
           content: book.itemCaption || null,
           published_at: published_at,
           is_visible: true
