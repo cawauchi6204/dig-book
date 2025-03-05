@@ -21,7 +21,7 @@ export const BookCard: React.FC<BookCardProps> = ({
   onInteraction,
 }) => {
   const [dragDirection, setDragDirection] = useState<string | null>(null);
-  
+
   const handleSwipe = (
     dir: string,
     id: string,
@@ -61,7 +61,6 @@ export const BookCard: React.FC<BookCardProps> = ({
       >
         <div
           onClick={(e) => onInteraction(character.isbn, e)}
-          onTouchStart={(e) => onInteraction(character.isbn, e)}
           className={`${styles.card} ${
             flipped[character.isbn] ? styles.flipped : ""
           }`}
@@ -72,13 +71,13 @@ export const BookCard: React.FC<BookCardProps> = ({
               {dragDirection === "right" ? "LIKE" : "NOPE"}
             </div>
           )}
-          
+
           {/* 表面（本の表紙） */}
           <div
             style={{
               backgroundImage: `url(${character.cover || "/img/richard.jpg"})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
+              backgroundSize: "cover",
+              backgroundPosition: "center",
             }}
             className={styles.coverImage}
           >
@@ -91,7 +90,7 @@ export const BookCard: React.FC<BookCardProps> = ({
               </p>
             </div>
           </div>
-          
+
           {/* 裏面（本の内容） */}
           <div
             className={styles.content}
@@ -104,20 +103,31 @@ export const BookCard: React.FC<BookCardProps> = ({
             }}
           >
             <h3 className={styles.title}>{character.title}</h3>
-            <div
-              className={styles.description}
-              dangerouslySetInnerHTML={{ __html: character.content || "" }}
-            ></div>
-            <div className={styles.footer}>
+            <p className={styles.author}>著者: {getAuthor()}</p>
+
+            {character.published_at && (
               <p className={styles.date}>
-                発売日:{" "}
-                {new Date(character.published_at || "").toLocaleDateString()}
+                発売日: {new Date(character.published_at).toLocaleDateString()}
               </p>
-            </div>
+            )}
+
+            {character.price && (
+              <p className={styles.price}>
+                価格: ¥{character.price.toLocaleString()}
+              </p>
+            )}
+
+            {character.content && (
+              <p className={styles.contentText}>
+                {character.content.replace(/<[^>]*>/g, "")}
+              </p>
+            )}
+
+            <p className={styles.isbn}>ISBN: {character.isbn}</p>
           </div>
         </div>
       </TinderCard>
-      
+
       {/* アクションボタン */}
       <div className={styles.actionButtons}>
         <button
