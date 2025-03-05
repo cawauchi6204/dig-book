@@ -75,7 +75,11 @@ export const BookCard: React.FC<BookCardProps> = ({
           
           {/* 表面（本の表紙） */}
           <div
-            style={{ backgroundImage: `url(${character.cover || ""})` }}
+            style={{
+              backgroundImage: `url(${character.cover || "/img/richard.jpg"})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center'
+            }}
             className={styles.coverImage}
           >
             {/* 本の情報をオーバーレイ表示 */}

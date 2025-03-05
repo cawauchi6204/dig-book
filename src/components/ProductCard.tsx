@@ -27,7 +27,7 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
         <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-[5px_5px_10px_rgba(0,0,0,0.3)]">
           <div className={styles.bookCover}>
             <Image
-              src={product.cover ?? ""}
+              src={product.cover ?? "/img/richard.jpg"}
               alt={product.title ?? ""}
               fill
               className="object-cover"
@@ -36,7 +36,7 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           </div>
         </div>
         <div className="mt-3">
-          <h3 className="text-xs font-semibold line-clamp-2 min-h-[2rem] leading-4">
+          <h3 className="text-xs font-semibold min-h-[2rem] leading-4">
             {product.title}
           </h3>
           <button className={`mt-2 px-4 py-1 text-white rounded-md text-sm transition-colors ${
