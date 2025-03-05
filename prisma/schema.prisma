@@ -24,6 +24,7 @@ model books {
   cover        String?
   content      String?
   link         String?
+  rakuten_link String?
   author       String?       @db.VarChar(255)
   price        Int?
   created_at   DateTime?     @default(now()) @db.Timestamptz(6)

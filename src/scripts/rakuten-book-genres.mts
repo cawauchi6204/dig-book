@@ -1,4 +1,4 @@
-import { genres } from "./rakuten-book-all-genres.mts";
+import { rakutenBookGenres } from "./rakuten-book-all-genres.mts";
 
 // ジャンルの型定義
 export interface Genre {
@@ -17,7 +17,7 @@ export function filterGenres(options: {
   parentId?: string;
   keyword?: string;
 }): Genre[] {
-  return genres.filter((genre) => {
+  return rakutenBookGenres.filter((genre) => {
     // レベルでフィルタリング
     if (options.level !== undefined && genre.level !== options.level) {
       return false;
@@ -49,7 +49,7 @@ export function filterGenres(options: {
  * @returns ジャンルオブジェクト、存在しない場合はundefined
  */
 export function getGenreById(id: string): Genre | undefined {
-  return genres.find((genre) => genre.id === id);
+  return rakutenBookGenres.find((genre) => genre.id === id);
 }
 
 /**
