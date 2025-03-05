@@ -147,7 +147,18 @@ export default function AdminPage() {
     const loadBooks = async () => {
       setIsLoading(true);
       const fetchedBooks = await fetchBooksByGenre(activeGenre);
-      setBooks(fetchedBooks);
+      
+      // 出版日の降順でソート（最新の本が上に表示される）
+      const sortedBooks = [...fetchedBooks].sort((a, b) => {
+        // published_atがnullの場合は最後に表示
+        if (!a.published_at) return 1;
+        if (!b.published_at) return -1;
+        
+        // 日付を比較して降順にソート
+        return new Date(b.published_at).getTime() - new Date(a.published_at).getTime();
+      });
+      
+      setBooks(sortedBooks);
       setIsLoading(false);
     };
 
