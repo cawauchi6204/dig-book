@@ -50,6 +50,7 @@ export async function POST(request: Request) {
       isbn?: {
         notIn: string[];
       };
+      is_visible?: boolean;
     } = {};
 
     if (genre) {
@@ -67,6 +68,10 @@ export async function POST(request: Request) {
         notIn: isbnExcludeList
       };
     }
+
+    // is_visibleフィールドでのフィルタリングを追加
+    // デフォルトでは表示可能な本のみを返す
+    whereCondition.is_visible = true;
 
     // クエリの実行
     const books = await prisma.books.findMany({
