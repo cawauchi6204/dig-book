@@ -8,14 +8,16 @@
   position: relative;
   width: 90vw;
   height: calc(90vw * 1.4);
-  max-width: 500px;
-  max-height: 700px;
+  max-width: 360px;
+  max-height: 600px;
   margin: 0 auto;
-  border-radius: 5px;
-  box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
   cursor: pointer;
   transition: transform 0.7s;
   transform-style: preserve-3d;
+  background-color: white;
+  overflow: hidden;
 }
 
 .flipped {
@@ -26,7 +28,7 @@
   position: absolute;
   width: 100%;
   height: 100%;
-  border-radius: 5px;
+  border-radius: 10px;
   background-size: cover;
   background-position: center;
   backface-visibility: hidden;
@@ -37,10 +39,11 @@
   bottom: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: 40%;
   content: "";
-  background: linear-gradient(-90deg, #fff0, #ffffff1a 80%, #ffffff4d 95%, #fff6 96.5%, #cbcbcb14 98%, #6a6a6a1a);
-  border-radius: 5px;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0) 100%);
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
 }
 
 .content {
@@ -54,6 +57,7 @@
   box-sizing: border-box;
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
+  border-radius: 10px;
 }
 
 .title {
@@ -81,4 +85,110 @@
 
 .hidden {
   display: none;
-} 
+}
+
+/* Tinder風のUI要素 */
+.bookInfo {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  color: white;
+  z-index: 10;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+.bookTitle {
+  font-size: 1.5rem;
+  font-weight: bold;
+  margin-bottom: 5px;
+  max-width: 80%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.bookAuthor {
+  font-size: 1rem;
+  margin-bottom: 5px;
+}
+
+.bookPublished {
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+}
+
+/* スワイプ時のラベル */
+.dragLabel {
+  position: absolute;
+  top: 50px;
+  padding: 10px 15px;
+  border-radius: 5px;
+  font-weight: bold;
+  font-size: 2rem;
+  text-transform: uppercase;
+  transform: rotate(-30deg);
+  z-index: 10;
+  border: 3px solid;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.right {
+  right: 40px;
+  color: #4CD964;
+  border-color: #4CD964;
+}
+
+.left {
+  left: 40px;
+  color: #FF3B30;
+  border-color: #FF3B30;
+}
+
+/* アクションボタン */
+.actionButtons {
+  position: absolute;
+  bottom: -70px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  z-index: 100;
+}
+
+.actionButton {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
+  cursor: pointer;
+  transition: transform 0.2s;
+  background-color: white;
+}
+
+.actionButton:hover {
+  transform: scale(1.1);
+}
+
+.actionButton.nope {
+  color: #FF3B30;
+  border: 2px solid #FF3B30;
+}
+
+.actionButton.like {
+  color: #4CD964;
+  border: 2px solid #4CD964;
+}
+
+.actionButton.superLike {
+  color: #007AFF;
+  border: 2px solid #007AFF;
+}
+
+.actionIcon {
+  font-size: 1.5rem;
+}

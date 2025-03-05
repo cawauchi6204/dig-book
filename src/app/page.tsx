@@ -78,7 +78,7 @@ function Simple() {
   };
 
   return (
-    <div className="h-screen overflow-hidden bg-[#121212]">
+    <div className="h-screen overflow-hidden bg-gray-50">
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-10">
         <BookList initialBooks={books} onEmpty={handleEmpty} />
       </div>
@@ -87,3 +87,4 @@ function Simple() {
 }
 
 export default Simple;
+
