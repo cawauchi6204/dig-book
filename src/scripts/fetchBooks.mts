@@ -1,4 +1,4 @@
-import { createClient } from "@supabase/supabase-js";
+import { PrismaClient } from "@prisma/client";
 const fetch = (await import("node-fetch")).default;
 import dotenv from "dotenv";
 
@@ -69,11 +69,22 @@ const getLanguage = (rakutenGenreId: string): string => {
 
 dotenv.config();
 
-// Supabaseクライアントの初期化
-const supabase = createClient(
-  process.env.NEXT_PUBLIC_SUPABASE_URL!,
-  process.env.SUPABASE_SERVICE_ROLE_KEY!
-);
+// Prismaクライアントの初期化
+const prisma = new PrismaClient({
+  log: [
+    {
+      emit: "event",
+      level: "query",
+    },
+  ],
+});
+
+// SQLクエリのログ出力設定
+prisma.$on("query", (e: { query: string; params: string; duration: number }) => {
+  console.log("Query: " + e.query);
+  console.log("Params: " + e.params);
+  console.log("Duration: " + e.duration + "ms");
+});
 
 interface RakutenBook {
   title: string;
@@ -129,20 +140,20 @@ async function insertBooks(books: RakutenBook[]) {
         continue;
       }
 
-// 画像がnoimageの場合はスキップ
+      // 画像がnoimageの場合はスキップ
       if (book.largeImageUrl && book.largeImageUrl.includes("noimage")) {
         console.log("画像がnoimageのため、以下の本をスキップします:", book.title);
         continue;
       }
 
-      const { data: existingBook } = await supabase
-        .from("books")
-        .select()
-        .eq("isbn", book.isbn)
-        .single();
+      const existingBook = await prisma.books.findUnique({
+        where: {
+          isbn: book.isbn
+        }
+      });
 
       if (!existingBook) {
-        let published_at: string | null = null;
+        let published_at: Date | null = null;
         if (book.salesDate) {
           // 日付文字列から年月日以外の文字を除去
           const dateStr = book.salesDate
@@ -158,7 +169,7 @@ async function insertBooks(books: RakutenBook[]) {
               const year = numStr.slice(0, 4);
               const month = numStr.slice(4, 6);
               const day = numStr.slice(6, 8);
-              published_at = `${year}-${month}-${day}`;
+              published_at = new Date(`${year}-${month}-${day}`);
             }
           }
         }
@@ -173,7 +184,7 @@ async function insertBooks(books: RakutenBook[]) {
 
         const bookData = {
           isbn: book.isbn,
-          title: book.title || null,
+          title: book.title || "",
           author: book.author || null,
           price: book.itemPrice || null,
           cover: cover,
@@ -181,10 +192,11 @@ async function insertBooks(books: RakutenBook[]) {
           content: book.itemCaption || null,
           published_at: published_at,
           language: getLanguage(book.booksGenreId),
+          is_visible: true
         };
 
         // いずれかの値がnullの場合はスキップ
-        if (Object.values(bookData).includes(null)) {
+        if (!bookData.title) {
           console.log(
             `必須フィールドが不足しているため、以下の本をスキップします:`,
             book.title
@@ -195,14 +207,12 @@ async function insertBooks(books: RakutenBook[]) {
         console.log("挿入するデータ:", bookData);
         console.log("ジャンル:", genres);
 
-        const { data: bookResult, error } = await supabase
-          .from("books")
-          .insert(bookData)
-          .select()
-          .single();
+        const bookResult = await prisma.books.create({
+          data: bookData
+        });
 
-        if (error) {
-          console.error("データの挿入に失敗:", error);
+        if (!bookResult) {
+          console.error("データの挿入に失敗");
           continue;
         }
 
@@ -213,17 +223,13 @@ async function insertBooks(books: RakutenBook[]) {
             genre_id: genre
           }));
 
-          const { error: genreError } = await supabase
-            .from("book_genres")
-            .insert(genreInserts);
-
-          if (genreError) {
-            console.error("ジャンルの挿入に失敗:", genreError);
-          }
+          await prisma.book_genres.createMany({
+            data: genreInserts
+          });
         }
       }
     } catch (error) {
-      console.error("Supabaseの操作に失敗:", error);
+      console.error("Prismaの操作に失敗:", error);
       console.error("問題のある日付データ:", book.salesDate); // デバッグ用
     }
   }
@@ -233,14 +239,18 @@ async function main() {
   const genreId = "001006018003";
   const totalPages = 200; // 取得したいページ数を指定
 
-  for (let page = 1; page <= totalPages; page++) {
-    console.log(`ページ ${page} の処理を開始`);
-    const books = await fetchBooksFromRakuten(genreId, page);
-    await insertBooks(books);
-    // APIの制限を考慮して、リクエスト間に少し待機時間を入れる
-    if (page < totalPages) {
-      await new Promise((resolve) => setTimeout(resolve, 1000));
+  try {
+    for (let page = 1; page <= totalPages; page++) {
+      console.log(`ページ ${page} の処理を開始`);
+      const books = await fetchBooksFromRakuten(genreId, page);
+      await insertBooks(books);
+      // APIの制限を考慮して、リクエスト間に少し待機時間を入れる
+      if (page < totalPages) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
     }
+  } finally {
+    await prisma.$disconnect();
   }
 }
 

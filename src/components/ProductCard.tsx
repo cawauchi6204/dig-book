@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { Database } from "../../types/supabasetype";
+import { books } from "@prisma/client";
 import styles from './ProductCard.module.css';
 
 interface ProductCardProps {
-  product: Database["public"]["Tables"]["books"]["Row"];
+  product: books;
   onRemove?: (id: string) => void;
 }
 

@@ -1,7 +1,7 @@
-import { Database } from "../../types/supabasetype";
+import { books } from "@prisma/client";
 
 export function useBookStorage(
-  books: Database["public"]["Tables"]["books"]["Row"][]
+  books: books[]
 ) {
   const handleSwipe = (direction: string, isbn: string) => {
     const currentItem = books.find((book) => book.isbn === isbn);
@@ -24,12 +24,12 @@ export function useBookStorage(
 
   const addToStorage = (
     key: string,
-    book: Database["public"]["Tables"]["books"]["Row"]
+    book: books
   ) => {
     const stored = JSON.parse(localStorage.getItem(key) || "[]");
     if (
       !stored.some(
-        (item: Database["public"]["Tables"]["books"]["Row"]) =>
+        (item: books) =>
           item.isbn === book.isbn
       )
     ) {

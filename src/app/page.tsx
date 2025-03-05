@@ -1,10 +1,8 @@
 "use client";
 
 import { BookList } from "../components/BookList";
-import { Database } from "../../types/supabasetype";
+import { books } from "@prisma/client";
 import { useQuery } from "@tanstack/react-query";
-
-export const runtime = 'edge';
 
 function Simple() {
   const queryParams =
@@ -39,10 +37,10 @@ function Simple() {
 
         // likedBooksとnopeBooksからISBNの配列を作成
         const likedBookIsbns = likedBooks.map(
-          (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
+          (book: books) => book.isbn
         );
         const nopeBookIsbns = nopeBooks.map(
-          (book: Database["public"]["Tables"]["books"]["Row"]) => book.isbn
+          (book: books) => book.isbn
         );
 
         const response = await fetch("/api/books", {

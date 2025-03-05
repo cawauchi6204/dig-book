@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
-import { Database } from "../../types/supabasetype";
+import { books } from "@prisma/client";
 
 import styles from "./BookCard.module.css";
 
 interface BookCardProps {
-  character: Database["public"]["Tables"]["books"]["Row"];
+  character: books;
   flipped: { [key: string]: boolean };
   onSwipe: (dir: string, id: string) => void;
   onCardLeftScreen: (id: string) => void;

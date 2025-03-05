@@ -2,12 +2,10 @@
 
 import { useEffect, useState } from 'react'
 import ProductCard from '../../components/ProductCard'
-import { Database } from '../../../types/supabasetype'
+import { books, book_genres } from '@prisma/client'
 import { genres } from '../constants/genres'
 
-export const runtime = 'edge';
-
-type Book = Database["public"]["Tables"]["books"]["Row"] & { book_genres: Database["public"]["Tables"]["book_genres"]["Row"][] }
+type Book = books & { book_genres: book_genres[] }
 
 const getFavoriteProducts = (): Book[] => {
   if (typeof window === 'undefined') return []

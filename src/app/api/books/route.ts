@@ -1,8 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import { NextResponse } from "next/server";
 
-export const runtime = 'edge';
-
 // PrismaClientのグローバルインスタンスを作成
 const globalForPrisma = globalThis as unknown as {
   prisma: PrismaClient | undefined;

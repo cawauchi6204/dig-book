@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import { Database } from '../../types/supabasetype';
+import { books } from '@prisma/client';
 
-export function useBookList(initialBooks: Database["public"]["Tables"]["books"]["Row"][], onEmpty: () => Promise<Database["public"]["Tables"]["books"]["Row"][]>) {
+export function useBookList(initialBooks: books[], onEmpty: () => Promise<books[]>) {
   const [books, setBooks] = useState(initialBooks);
 
   useEffect(() => {
@@ -24,4 +24,4 @@ export function useBookList(initialBooks: Database["public"]["Tables"]["books"][
   };
 
   return { books, setBooks, handleOutOfFrame };
-} 
+}

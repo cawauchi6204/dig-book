@@ -1,15 +1,14 @@
 "use client";
 import React from "react";
 import { BookCard } from "@/components/BookCard";
-import { Database } from "../../types/supabasetype";
+import { books } from "@prisma/client";
 import { useBookList } from "@/hooks/useBookList";
 import { useFlipCard } from "@/hooks/useFlipCard";
 import { useBookStorage } from "@/hooks/useBookStorage";
 
-type Book = Database["public"]["Tables"]["books"]["Row"];
 type Props = {
-  initialBooks: Book[];
-  onEmpty: () => Promise<Book[]>;
+  initialBooks: books[];
+  onEmpty: () => Promise<books[]>;
 };
 
 export function BookList({ initialBooks, onEmpty }: Props) {
