@@ -56,14 +56,6 @@ function getCategory(genreId: string): string {
 const convertToNewGenreId = (rakutenGenreId: string): string => {
   return getCategory(rakutenGenreId);
 };
-// ジャンルIDからlanguageを取得
-const getLanguage = (rakutenGenreId: string): string => {
-  // ジャンルが005の場合は英語
-  if (rakutenGenreId.startsWith("005")) {
-    return "en";
-  }
-  return "ja";
-};
 
 // 下から実際につかう
 
@@ -191,7 +183,6 @@ async function insertBooks(books: RakutenBook[]) {
           link: book.itemUrl || null,
           content: book.itemCaption || null,
           published_at: published_at,
-          language: getLanguage(book.booksGenreId),
           is_visible: true
         };
 
