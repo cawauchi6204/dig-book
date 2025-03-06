@@ -35,25 +35,25 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
             />
           </div>
         </div>
-        <div className="mt-3">
-          <h3 className="text-xs font-semibold min-h-[2rem] leading-4">
+        <div className="mt-3 w-full">
+          <h3 className="text-xs font-semibold h-[2rem] leading-4 overflow-hidden text-ellipsis line-clamp-2">
             {product.title}
           </h3>
-          <div className="flex md:flex-row flex-col gap-2">
-            {product.link && (
+          <div className="flex md:flex-row flex-col gap-2 h-[40px] mt-2">
+            {product.link ? (
               <button
-                className={`mt-2 px-4 py-1 text-white rounded-md text-sm transition-colors bg-blue-500 hover:bg-blue-600`}
+                className={`px-4 py-1 text-white rounded-md text-sm transition-colors bg-blue-500 hover:bg-blue-600`}
               >
                 amazon
               </button>
-            )}
-            {product.rakuten_link && (
+            ) : <div className="h-[28px]"></div>}
+            {product.rakuten_link ? (
               <button
-                className={`mt-2 px-4 py-1 text-white rounded-md text-sm bg-[#BF0000] hover:bg-[#a00000] transition-colors`}
+                className={`px-4 py-1 text-white rounded-md text-sm bg-[#BF0000] hover:bg-[#a00000] transition-colors`}
               >
                 rakuten
               </button>
-            )}
+            ) : <div className="h-[28px]"></div>}
           </div>
         </div>
       </div>
