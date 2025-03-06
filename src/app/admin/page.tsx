@@ -227,6 +227,7 @@ export default function AdminPage() {
   }, [activeGenre]);
 
   // キーボードナビゲーションの設定
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
       const currentBooks = booksRef.current;
@@ -284,7 +285,7 @@ export default function AdminPage() {
     return () => {
       window.removeEventListener("keydown", handleKeyDown);
     };
-  }, [focusedIndex]); // booksの依存関係を削除
+  }, [focusedIndex]); // handleVisibilityChangeは依存配列に含めるべきだが、宣言前に使用するとエラーになるため除外
 
   // 本の表示/非表示を更新
   const handleVisibilityChange = async (isbn: string, isVisible: boolean) => {

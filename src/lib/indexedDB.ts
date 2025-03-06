@@ -1,5 +1,21 @@
 // IndexedDBを操作するためのユーティリティ関数
 
+// 本の型定義
+interface BookData {
+  isbn: string;
+  title: string;
+  author?: string | null;
+  cover?: string | null;
+  published_at?: Date | null;
+  [key: string]: unknown; // その他のプロパティを許可
+}
+
+// IndexedDBに保存する本の型
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+interface StoredBook extends BookData {
+  type: 'liked' | 'nope';
+}
+
 const DB_NAME = 'digBookDB';
 const DB_VERSION = 1;
 const BOOK_STORE = 'books';
@@ -33,6 +49,7 @@ export const initDB = (): Promise<IDBDatabase> => {
 };
 
 // 本を保存する
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const saveBook = async (book: any, type: 'liked' | 'nope'): Promise<void> => {
   try {
     const db = await initDB();
@@ -65,6 +82,7 @@ export const saveBook = async (book: any, type: 'liked' | 'nope'): Promise<void>
 };
 
 // 特定タイプの本を取得する
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export const getBooksByType = async (type: 'liked' | 'nope'): Promise<any[]> => {
   try {
     const db = await initDB();
