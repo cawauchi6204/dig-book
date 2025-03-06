@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { books } from "@prisma/client";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, ExternalLink } from "lucide-react";
+import Image from "next/image";
 
 export default function BookDetail({ params }: { params: { isbn: string } }) {
   const [book, setBook] = useState<books | null>(null);
@@ -93,11 +94,13 @@ export default function BookDetail({ params }: { params: { isbn: string } }) {
 
         <div className="flex flex-col md:flex-row gap-6">
           {/* 本の表紙 */}
-          <div className="w-full md:w-1/3">
-            <img
+          <div className="w-full md:w-1/3 relative aspect-[2/3]">
+            <Image
               src={book.cover || "/img/richard.jpg"}
               alt={book.title}
-              className="w-full h-auto rounded-lg shadow-md"
+              fill
+              sizes="(max-width: 768px) 100vw, 33vw"
+              className="rounded-lg shadow-md object-cover"
             />
           </div>
 
@@ -125,9 +128,9 @@ export default function BookDetail({ params }: { params: { isbn: string } }) {
             {/* 外部リンク */}
             <div className="flex flex-wrap gap-2 mb-6">
               {/* rakuten_linkプロパティが存在するか確認 */}
-              {(book as any).rakuten_link && (
+              {book.rakuten_link && (
                 <a
-                  href={(book as any).rakuten_link}
+                  href={book.rakuten_link}
                   target="_blank"
                   rel="noopener noreferrer"
                   className="inline-flex items-center px-4 py-2 bg-red-600 text-white rounded-md hover:bg-red-700 transition-colors"

@@ -10,10 +10,7 @@ export function useFlipCard() {
     }));
   };
 
-  const handleInteraction = (
-    id: string,
-    e: React.MouseEvent | React.TouchEvent
-  ) => {
+  const handleInteraction = (id: string) => {
     // クリックイベントでカードをフリップ
     handleClick(id);
   };

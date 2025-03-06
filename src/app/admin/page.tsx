@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { genres } from "@/app/constants/genres";
 import { Loader2 } from "lucide-react";
+import Image from "next/image";
 
 // 本の型定義
 interface Book {
@@ -90,11 +91,13 @@ const BookCard = ({ book, onVisibilityChange }: { book: Book; onVisibilityChange
     <div className="w-full border rounded-md overflow-hidden shadow-sm">
       <div className="p-4">
         <div className="flex items-start gap-4">
-          <div className="w-20 h-28 flex-shrink-0 overflow-hidden rounded-sm">
-            <img
+          <div className="w-20 h-28 flex-shrink-0 overflow-hidden rounded-sm relative">
+            <Image
               src={book.cover || "/img/richard.jpg"}
               alt={book.title}
-              className="w-full h-full object-cover"
+              fill
+              sizes="(max-width: 768px) 80px, 112px"
+              className="object-cover"
             />
           </div>
           <div className="flex-1 min-w-0">

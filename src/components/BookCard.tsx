@@ -7,18 +7,14 @@ import styles from "./BookCard.module.css";
 
 interface BookCardProps {
   character: books;
-  flipped: { [key: string]: boolean };
   onSwipe: (dir: string, id: string) => void;
   onCardLeftScreen: (id: string) => void;
-  onInteraction: (id: string, e: React.MouseEvent | React.TouchEvent) => void;
 }
 
 export const BookCard: React.FC<BookCardProps> = ({
   character,
-  flipped,
   onSwipe,
   onCardLeftScreen,
-  onInteraction,
 }) => {
   const [dragDirection, setDragDirection] = useState<string | null>(null);
   const [showInfo, setShowInfo] = useState(false);
