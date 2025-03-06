@@ -10,7 +10,7 @@
     "db:pull": "npx prisma db pull",
     "db:pull-print": "npx prisma db pull --print",
     "db:push": "npx prisma db push",
-    "scripts": "NODE_OPTIONS=\"--loader ts-node/esm\" ts-node --esm --project tsconfig.scripts.json",
+    "scripts": "npx tsx src/scripts/fetchBooks.mts",
     "build:cf": "npx @cloudflare/next-on-pages@1",
     "start:cf": "npx wrangler pages dev ./.vercel/output/static --compatibility-flags nodejs_compat",
     "pages:build": "next build && npx @cloudflare/next-on-pages@1"
