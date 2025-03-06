@@ -57,7 +57,6 @@ export async function PATCH(request: Request) {
     const updatedBook = await prisma.books.update({
       where: { isbn },
       data: {
-        // @ts-expect-error - is_visible はスキーマに存在するが型定義に反映されていない
         is_visible: isVisible
       },
     });
@@ -87,7 +86,6 @@ export async function GET(request: Request) {
         select: {
           isbn: true,
           title: true,
-          // @ts-expect-error - is_visible はスキーマに存在するが型定義に反映されていない
           is_visible: true
         },
       });
@@ -117,7 +115,6 @@ export async function GET(request: Request) {
           title: true,
           author: true,
           cover: true,
-          // @ts-expect-error - is_visible はスキーマに存在するが型定義に反映されていない
           is_visible: true,
           published_at: true,
         },
@@ -136,7 +133,6 @@ export async function GET(request: Request) {
         title: true,
         author: true,
         cover: true,
-        // @ts-expect-error - is_visible はスキーマに存在するが型定義に反映されていない
         is_visible: true,
         published_at: true,
         book_genres: {
