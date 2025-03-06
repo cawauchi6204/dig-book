@@ -20,10 +20,6 @@
   overflow: hidden;
 }
 
-.flipped {
-  transform: rotateY(180deg);
-}
-
 .coverImage {
   position: absolute;
   width: 100%;
@@ -31,7 +27,6 @@
   border-radius: 10px;
   background-size: cover;
   background-position: center;
-  backface-visibility: hidden;
 }
 
 .coverImage:after {
@@ -46,18 +41,52 @@
   border-bottom-right-radius: 10px;
 }
 
-.content {
+/* 情報モーダル */
+.infoModal {
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
-  backface-visibility: hidden;
-  transform: rotateY(180deg);
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 100;
+  border-radius: 10px;
+}
+
+.modalContent {
+  position: relative;
+  width: 90%;
+  max-height: 90%;
   background: white;
   padding: 20px;
   box-sizing: border-box;
   overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
   border-radius: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.closeButton {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #f3f4f6;
+  border: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  cursor: pointer;
+  color: #4b5563;
+}
+
+.closeButton:hover {
+  background: #e5e7eb;
 }
 
 .title {
@@ -133,7 +162,7 @@
 
 .detailButton {
   margin-top: 10px;
-  padding: 6px 12px;
+  padding: 8px 14px;
   background-color: rgba(255, 255, 255, 0.9);
   color: #333;
   border: none;
@@ -143,6 +172,10 @@
   cursor: pointer;
   transition: all 0.2s;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
 }
 
 .detailButton:hover {

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
 import { books } from "@prisma/client";
-import { X, Heart, Star } from "lucide-react";
+import { X, Heart, Star, Info } from "lucide-react";
 
 import styles from "./BookCard.module.css";
 
@@ -21,6 +21,7 @@ export const BookCard: React.FC<BookCardProps> = ({
   onInteraction,
 }) => {
   const [dragDirection, setDragDirection] = useState<string | null>(null);
+  const [showInfo, setShowInfo] = useState(false);
 
   const handleSwipe = (
     dir: string,
@@ -49,6 +50,12 @@ export const BookCard: React.FC<BookCardProps> = ({
     return "著者不明";
   };
 
+  // 情報表示ボタンのクリックハンドラ
+  const handleInfoButtonClick = (e: React.MouseEvent) => {
+    e.stopPropagation(); // カード全体のクリックイベントが発火するのを防ぐ
+    setShowInfo(!showInfo);
+  };
+
   return (
     <>
       <TinderCard
@@ -59,12 +66,7 @@ export const BookCard: React.FC<BookCardProps> = ({
         swipeThreshold={1}
         preventSwipe={["up", "down"]}
       >
-        <div
-          onClick={(e) => onInteraction(character.isbn, e)}
-          className={`${styles.card} ${
-            flipped[character.isbn] ? styles.flipped : ""
-          }`}
-        >
+        <div className={styles.card}>
           {/* スワイプ時のラベル表示 */}
           {dragDirection && (
             <div className={`${styles.dragLabel} ${styles[dragDirection]}`}>
@@ -88,43 +90,57 @@ export const BookCard: React.FC<BookCardProps> = ({
               <p className={styles.bookPublished}>
                 {new Date(character.published_at || "").toLocaleDateString()}
               </p>
+              
+              {/* 詳細情報ボタン */}
+              <button
+                className={styles.detailButton}
+                onClick={handleInfoButtonClick}
+                aria-label="詳細情報"
+              >
+                <Info size={16} style={{ marginRight: '4px' }} />
+                詳細を見る
+              </button>
             </div>
           </div>
 
-          {/* 裏面（本の内容） */}
-          <div
-            className={styles.content}
-            onClick={(e) => {
-              // カードが裏面の時は、クリックイベントの伝播を止めて
-              // カード全体のクリックイベントが発火するのを防ぐ
-              if (flipped[character.isbn]) {
-                e.stopPropagation();
-              }
-            }}
-          >
-            <h3 className={styles.title}>{character.title}</h3>
-            <p className={styles.author}>著者: {getAuthor()}</p>
+          {/* 情報モーダル - ボタンをクリックしたときのみ表示 */}
+          {showInfo && (
+            <div
+              className={styles.infoModal}
+              onClick={(e) => e.stopPropagation()} // モーダル内クリックの伝播を防止
+            >
+              <div className={styles.modalContent}>
+                <button
+                  className={styles.closeButton}
+                  onClick={handleInfoButtonClick}
+                >
+                  ×
+                </button>
+                <h3 className={styles.title}>{character.title}</h3>
+                <p className={styles.author}>著者: {getAuthor()}</p>
 
-            {character.published_at && (
-              <p className={styles.date}>
-                発売日: {new Date(character.published_at).toLocaleDateString()}
-              </p>
-            )}
+                {character.published_at && (
+                  <p className={styles.date}>
+                    発売日: {new Date(character.published_at).toLocaleDateString()}
+                  </p>
+                )}
 
-            {character.price && (
-              <p className={styles.price}>
-                価格: ¥{character.price.toLocaleString()}
-              </p>
-            )}
+                {character.price && (
+                  <p className={styles.price}>
+                    価格: ¥{character.price.toLocaleString()}
+                  </p>
+                )}
 
-            {character.content && (
-              <p className={styles.contentText}>
-                {character.content.replace(/<[^>]*>/g, "")}
-              </p>
-            )}
+                {character.content && (
+                  <p className={styles.contentText}>
+                    {character.content.replace(/<[^>]*>/g, "")}
+                  </p>
+                )}
 
-            <p className={styles.isbn}>ISBN: {character.isbn}</p>
-          </div>
+                <p className={styles.isbn}>ISBN: {character.isbn}</p>
+              </div>
+            </div>
+          )}
         </div>
       </TinderCard>
 
