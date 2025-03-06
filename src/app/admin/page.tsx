@@ -95,11 +95,13 @@ const BookCard = ({
   onVisibilityChange,
   isFocused = false,
   isUpdating = false,
+  cardRef,
 }: {
   book: Book;
   onVisibilityChange: (isbn: string, isVisible: boolean) => Promise<void>;
   isFocused?: boolean;
   isUpdating?: boolean;
+  cardRef?: React.RefObject<HTMLDivElement>;
 }) => {
   const handleToggle = () => {
     // 更新処理は親コンポーネントに委譲
@@ -109,6 +111,7 @@ const BookCard = ({
 
   return (
     <div
+      ref={isFocused ? cardRef : undefined}
       className={`w-full border rounded-md overflow-hidden shadow-sm ${
         isFocused ? "ring-2 ring-blue-500 ring-offset-2" : ""
       }`}
@@ -173,11 +176,23 @@ export default function AdminPage() {
   const [focusedIndex, setFocusedIndex] = useState<number>(-1);
   const [updatingIsbn, setUpdatingIsbn] = useState<string | null>(null);
   const booksRef = useRef<Book[]>([]);
-
+  const focusedCardRef = useRef<HTMLDivElement>(null);
+  
   // booksの値が変わったらrefを更新
   useEffect(() => {
     booksRef.current = books;
   }, [books]);
+  
+  // フォーカスが変わったときに、その要素が画面の中央に来るようにスクロール
+  useEffect(() => {
+    if (focusedCardRef.current) {
+      // スムーズにスクロール
+      focusedCardRef.current.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center', // 要素が画面の中央に来るようにスクロール
+      });
+    }
+  }, [focusedIndex]);
 
   // 選択されたジャンルの本を取得
   useEffect(() => {
@@ -359,6 +374,7 @@ export default function AdminPage() {
                   onVisibilityChange={handleVisibilityChange}
                   isFocused={index === focusedIndex}
                   isUpdating={updatingIsbn === book.isbn}
+                  cardRef={focusedCardRef}
                 />
               ))}
             </div>
