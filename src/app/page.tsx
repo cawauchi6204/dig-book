@@ -80,6 +80,12 @@ function Simple() {
   return (
     <div className="h-screen overflow-hidden bg-gray-50">
       <div className="w-full max-w-[600px] h-[70vh] relative mx-auto pt-4">
+        {/* ジャンル表示 */}
+        <div className="text-center mb-2 bg-white rounded-lg py-1 shadow-sm">
+          <p className="text-gray-700 font-medium">
+            {genre ? `ジャンル: ${genre}` : "すべてのジャンル"}
+          </p>
+        </div>
         <BookList initialBooks={books} onEmpty={handleEmpty} />
       </div>
     </div>
