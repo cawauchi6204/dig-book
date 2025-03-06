@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { books } from "@prisma/client";
 import styles from "./ProductCard.module.css";
+import { removeBook } from "../lib/indexedDB";
 
 interface ProductCardProps {
   product: books;
@@ -8,9 +9,18 @@ interface ProductCardProps {
 }
 
 export default function ProductCard({ product, onRemove }: ProductCardProps) {
-  const handleRemove = (e: React.MouseEvent) => {
+  const handleRemove = async (e: React.MouseEvent) => {
     e.preventDefault();
-    onRemove?.(product.isbn);
+    
+    try {
+      // IndexedDBから削除
+      await removeBook(product.isbn);
+      
+      // 親コンポーネントに通知（UIの更新用）
+      onRemove?.(product.isbn);
+    } catch (error) {
+      console.error('本の削除に失敗しました:', error);
+    }
   };
 
   return (

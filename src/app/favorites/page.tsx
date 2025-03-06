@@ -1,62 +1,80 @@
-'use client'
+"use client";
 
-import { useEffect, useState } from 'react'
-import ProductCard from '../../components/ProductCard'
-import { books, book_genres } from '@prisma/client'
-import { genres } from '../constants/genres'
+import { useEffect, useState } from "react";
+import ProductCard from "../../components/ProductCard";
+import { books, book_genres } from "@prisma/client";
+import { genres } from "../constants/genres";
+import { getBooksByType } from "../../lib/indexedDB";
 
-type Book = books & { book_genres: book_genres[] }
+type Book = books & { book_genres: book_genres[] };
 
-const getFavoriteProducts = (): Book[] => {
-  if (typeof window === 'undefined') return []
-  const likedBooks = localStorage.getItem('likedBooks')
-  return likedBooks ? JSON.parse(likedBooks).reverse() : []
-}
+const getFavoriteProducts = async (): Promise<Book[]> => {
+  if (typeof window === "undefined") return [];
+
+  try {
+    // IndexedDBからお気に入りの本を取得
+    const books = await getBooksByType("liked");
+    return books.reverse();
+  } catch (error) {
+    console.error("お気に入りの取得に失敗しました:", error);
+
+    // フォールバック: LocalStorageから取得
+    const likedBooks = localStorage.getItem("likedBooks");
+    return likedBooks ? JSON.parse(likedBooks).reverse() : [];
+  }
+};
 
 const getGenreTitle = (genreId: string): string => {
-  const genre = genres.find(genre => genre.id === genreId)
-  return genre?.title || 'その他'
-}
+  const genre = genres.find((genre) => genre.id === genreId);
+  return genre?.title || "その他";
+};
 
 const groupByGenre = (books: Book[]) => {
   const grouped = books.reduce((acc, book) => {
-    const genre = book.book_genres?.[0]?.genre_id || 'other'
+    const genre = book.book_genres?.[0]?.genre_id || "other";
     return {
       ...acc,
-      [genre]: [...(acc[genre] || []), book]
-    }
-  }, {} as Record<string, Book[]>)
+      [genre]: [...(acc[genre] || []), book],
+    };
+  }, {} as Record<string, Book[]>);
 
   return Object.fromEntries(
     Object.entries(grouped).sort((a, b) => {
-      if (a[0] === 'other') return 1
-      if (b[0] === 'other') return -1
-      const indexA = genres.findIndex(cat => cat.id === a[0])
-      const indexB = genres.findIndex(cat => cat.id === b[0])
-      return indexA - indexB
+      if (a[0] === "other") return 1;
+      if (b[0] === "other") return -1;
+      const indexA = genres.findIndex((cat) => cat.id === a[0]);
+      const indexB = genres.findIndex((cat) => cat.id === b[0]);
+      return indexA - indexB;
     })
-  )
-}
+  );
+};
 
 export default function FavoritesPage() {
-  const [favorites, setFavorites] = useState<Book[]>([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [expandedGenres, setExpandedGenres] = useState<Record<string, boolean>>({})
+  const [favorites, setFavorites] = useState<Book[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+  const [expandedGenres, setExpandedGenres] = useState<Record<string, boolean>>(
+    {}
+  );
+
+  // 本を削除する処理
+  const handleRemoveBook = (isbn: string) => {
+    setFavorites((prev) => prev.filter((book) => book.isbn !== isbn));
+  };
 
   useEffect(() => {
     const loadFavorites = async () => {
       try {
-        const data = getFavoriteProducts()
-        setFavorites(data)
+        const data = await getFavoriteProducts();
+        setFavorites(data);
       } catch (error) {
-        console.error('お気に入りの読み込みに失敗しました:', error)
+        console.error("お気に入りの読み込みに失敗しました:", error);
       } finally {
-        setIsLoading(false)
+        setIsLoading(false);
       }
-    }
+    };
 
-    loadFavorites()
-  }, [])
+    loadFavorites();
+  }, []);
 
   if (isLoading) {
     return (
@@ -65,32 +83,32 @@ export default function FavoritesPage() {
           <p className="text-gray-600">読み込み中...</p>
         </div>
       </div>
-    )
+    );
   }
 
-  const groupedFavorites = groupByGenre(favorites)
+  const groupedFavorites = groupByGenre(favorites);
 
   const toggleGenreExpand = (genreId: string) => {
-    setExpandedGenres(prev => ({
+    setExpandedGenres((prev) => ({
       ...prev,
-      [genreId]: !prev[genreId]
-    }))
-  }
+      [genreId]: !prev[genreId],
+    }));
+  };
 
   return (
     <div className="container mx-auto px-4">
       <div className="py-16">
-        <h1 className="text-3xl font-bold mb-8">
-          Your Favorites
-        </h1>
+        <h1 className="text-3xl font-bold mb-8">Your Favorites</h1>
         {favorites.length === 0 ? (
-          <p className="text-gray-600">お気に入りに登録された商品はありません。</p>
+          <p className="text-gray-600">
+            お気に入りに登録された商品はありません。
+          </p>
         ) : (
           <div className="space-y-12">
             {Object.entries(groupedFavorites).map(([genreId, books]) => {
-              const isExpanded = expandedGenres[genreId]
-              const displayBooks = isExpanded ? books : books.slice(0, 9)
-              const hasMore = books.length > 9
+              const isExpanded = expandedGenres[genreId];
+              const displayBooks = isExpanded ? books : books.slice(0, 9);
+              const hasMore = books.length > 9;
 
               return (
                 <div key={genreId}>
@@ -100,7 +118,10 @@ export default function FavoritesPage() {
                   <div className="grid grid-cols-3 gap-4 sm:gap-6">
                     {displayBooks.map((book) => (
                       <div key={book.isbn}>
-                        <ProductCard product={book} />
+                        <ProductCard
+                          product={book}
+                          onRemove={handleRemoveBook}
+                        />
                       </div>
                     ))}
                   </div>
@@ -110,16 +131,16 @@ export default function FavoritesPage() {
                         onClick={() => toggleGenreExpand(genreId)}
                         className="px-4 py-2 text-blue-600 hover:text-blue-800"
                       >
-                        {isExpanded ? '閉じる' : 'もっと見る'}
+                        {isExpanded ? "閉じる" : "もっと見る"}
                       </button>
                     </div>
                   )}
                 </div>
-              )
+              );
             })}
           </div>
         )}
       </div>
     </div>
-  )
+  );
 }
