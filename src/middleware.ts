@@ -4,7 +4,7 @@ import type { NextRequest } from 'next/server';
 // Basic認証のユーザー名とパスワードを環境変数から取得
 // 環境変数が設定されていない場合はデフォルト値を使用
 const ADMIN_USERNAME = process.env.ADMIN_USERNAME || 'admin';
-const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'password';
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || '12password34';
 
 // Basic認証のヘッダーを検証する関数
 function verifyBasicAuth(req: NextRequest) {
