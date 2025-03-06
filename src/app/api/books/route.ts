@@ -51,6 +51,9 @@ export async function POST(request: Request) {
         notIn: string[];
       };
       is_visible?: boolean;
+      published_at?: {
+        not: null;
+      };
     } = {};
 
     if (genre) {
@@ -65,13 +68,18 @@ export async function POST(request: Request) {
 
     if (isbnExcludeList.length > 0) {
       whereCondition.isbn = {
-        notIn: isbnExcludeList
+        notIn: isbnExcludeList,
       };
     }
 
     // is_visibleフィールドでのフィルタリングを追加
     // デフォルトでは表示可能な本のみを返す
     whereCondition.is_visible = true;
+
+    // 発売日が不明（null）の本を除外
+    whereCondition.published_at = {
+      not: null,
+    };
 
     // クエリの実行
     const books = await prisma.books.findMany({
@@ -97,11 +105,14 @@ export async function POST(request: Request) {
     }
 
     return NextResponse.json(books);
-
   } catch (error) {
     console.error("Error details:", error); // エラーの詳細をログ出力
     return NextResponse.json(
-      { error: `サーバーエラーが発生しました: ${error instanceof Error ? error.message : String(error)}` },
+      {
+        error: `サーバーエラーが発生しました: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      },
       { status: 500 }
     );
   }
