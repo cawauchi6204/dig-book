@@ -1,6 +1,6 @@
 import Image from "next/image";
 import { books } from "@prisma/client";
-import styles from './ProductCard.module.css';
+import styles from "./ProductCard.module.css";
 
 interface ProductCardProps {
   product: books;
@@ -39,12 +39,15 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
           <h3 className="text-xs font-semibold min-h-[2rem] leading-4">
             {product.title}
           </h3>
-          <button className={`mt-2 px-4 py-1 text-white rounded-md text-sm transition-colors ${
-            product.link?.includes('rakuten') 
-              ? 'bg-[#BF0000] hover:bg-[#a00000]' 
-              : 'bg-blue-500 hover:bg-blue-600'
-          }`}>
-            {product.link?.includes('rakuten') ? 'buy rakuten' : 'buy amazon'}
+          <button
+            className={`mt-2 px-4 py-1 text-white rounded-md text-sm transition-colors bg-blue-500 hover:bg-blue-600`}
+          >
+            amazonで購入する
+          </button>
+          <button
+            className={`mt-2 px-4 py-1 text-white rounded-md text-sm bg-[#BF0000] hover:bg-[#a00000] transition-colors`}
+          >
+            rakutenで購入する
           </button>
         </div>
       </div>
