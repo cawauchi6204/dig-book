@@ -3,7 +3,6 @@ import React from "react";
 import { BookCard } from "@/components/BookCard";
 import { books } from "@prisma/client";
 import { useBookList } from "@/hooks/useBookList";
-import { useFlipCard } from "@/hooks/useFlipCard";
 import { useBookStorage } from "@/hooks/useBookStorage";
 
 type Props = {
@@ -13,7 +12,6 @@ type Props = {
 
 export function BookList({ initialBooks, onEmpty }: Props) {
   const { books, handleOutOfFrame } = useBookList(initialBooks, onEmpty);
-  const { flipped, handleInteraction } = useFlipCard();
   const { handleSwipe } = useBookStorage(books);
 
   if (books.length === 0) {
@@ -37,10 +35,8 @@ export function BookList({ initialBooks, onEmpty }: Props) {
         <BookCard
           key={book.isbn}
           character={book}
-          flipped={flipped}
           onSwipe={handleSwipe}
           onCardLeftScreen={handleOutOfFrame}
-          onInteraction={handleInteraction}
         />
       ))}
     </>
