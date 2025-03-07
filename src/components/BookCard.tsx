@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
 import { books } from "@prisma/client";
 import { X, Heart } from "lucide-react";
+import { playSwipeSound } from "@/lib/soundEffects";
 
 import styles from "./BookCard.module.css";
 
@@ -30,12 +31,17 @@ export const BookCard: React.FC<BookCardProps> = ({
           ? "right"
           : "left"
         : dir;
+    
+    // スワイプ方向に応じた効果音を再生
+    playSwipeSound(normalizedDir);
+    
     setDragDirection(normalizedDir);
     onSwipe(normalizedDir, id);
     onCardLeftScreen(id);
   };
 
   const handleButtonClick = (direction: string) => {
+    // ボタンクリック時は効果音を再生せず、handleSwipe内で再生される
     handleSwipe(direction, character.isbn);
   };
 
