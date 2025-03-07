@@ -6,19 +6,19 @@ import TanstackQueryProvider from "./provider/TanstackQueryProvider";
 import { Suspense } from "react";
 
 export const metadata: Metadata = {
-  title: "DigBook - 本との新しい出会い",
+  title: "BookMatch - 本とのマッチングアプリ",
   description: "スワイプで見つける、あなたの次に読む1冊",
   openGraph: {
-    title: "DigBook - 本との新しい出会い",
+    title: "BookMatch - 本とのマッチングアプリ",
     description: "スワイプで見つける、あなたの次に読む1冊",
-    url: "https://dig-book.vercel.app",
-    siteName: "DigBook",
+    url: "https://bookmatch.vercel.app",
+    siteName: "BookMatch",
     images: [
       {
         url: "/assets/ogp.png",
         width: 1200,
         height: 630,
-        alt: "DigBook - スワイプで本と出会う、新しい読書体験",
+        alt: "BookMatch - スワイプで本と出会う、新しい読書体験",
       },
     ],
     locale: "ja_JP",
@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DigBook - 本との新しい出会い",
+    title: "BookMatch - 本とのマッチングアプリ",
     description: "スワイプで見つける、あなたの次に読む1冊",
     images: ["/assets/ogp.png"],
   },
