@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import TinderCard from "react-tinder-card";
 import { books } from "@prisma/client";
-import { X, Heart, Star, Info } from "lucide-react";
+import { X, Heart } from "lucide-react";
 
 import styles from "./BookCard.module.css";
 
@@ -86,16 +86,16 @@ export const BookCard: React.FC<BookCardProps> = ({
               <p className={styles.bookPublished}>
                 {new Date(character.published_at || "").toLocaleDateString()}
               </p>
-              
+
               {/* 詳細情報ボタン */}
-              <button
+              {/* <button
                 className={styles.detailButton}
                 onClick={handleInfoButtonClick}
                 aria-label="詳細情報"
               >
                 <Info size={16} style={{ marginRight: '4px' }} />
                 詳細を見る
-              </button>
+              </button> */}
             </div>
           </div>
 
@@ -117,7 +117,8 @@ export const BookCard: React.FC<BookCardProps> = ({
 
                 {character.published_at && (
                   <p className={styles.date}>
-                    発売日: {new Date(character.published_at).toLocaleDateString()}
+                    発売日:{" "}
+                    {new Date(character.published_at).toLocaleDateString()}
                   </p>
                 )}
 
@@ -148,13 +149,6 @@ export const BookCard: React.FC<BookCardProps> = ({
           aria-label="Nope"
         >
           <X className={styles.actionIcon} />
-        </button>
-        <button
-          className={`${styles.actionButton} ${styles.superLike}`}
-          onClick={() => handleButtonClick("up")}
-          aria-label="Super Like"
-        >
-          <Star className={styles.actionIcon} />
         </button>
         <button
           className={`${styles.actionButton} ${styles.like}`}
