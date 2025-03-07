@@ -1,4 +1,3 @@
-import Image from "next/image";
 import { books } from "@prisma/client";
 import styles from "./ProductCard.module.css";
 import { removeBook } from "../lib/indexedDB";
@@ -11,15 +10,15 @@ interface ProductCardProps {
 export default function ProductCard({ product, onRemove }: ProductCardProps) {
   const handleRemove = async (e: React.MouseEvent) => {
     e.preventDefault();
-    
+
     try {
       // IndexedDBから削除
       await removeBook(product.isbn);
-      
+
       // 親コンポーネントに通知（UIの更新用）
       onRemove?.(product.isbn);
     } catch (error) {
-      console.error('本の削除に失敗しました:', error);
+      console.error("本の削除に失敗しました:", error);
     }
   };
 
@@ -34,15 +33,14 @@ export default function ProductCard({ product, onRemove }: ProductCardProps) {
         </button>
       )}
       <div className="relative w-full aspect-[3/4] rounded-sm overflow-hidden shadow-[5px_5px_10px_rgba(0,0,0,0.3)]">
-        <div className={styles.bookCover}>
-          <Image
-            src={product.cover ?? "/img/richard.jpg"}
-            alt={product.title ?? ""}
-            fill
-            className="object-cover"
-            sizes="(min-width: 768px) 33vw, (min-width: 640px) 50vw, 100vw"
-          />
-        </div>
+        <div
+          className={styles.bookCover}
+          style={{
+            backgroundImage: `url(${product.cover || "/img/richard.jpg"})`,
+            backgroundSize: "cover",
+            backgroundPosition: "center",
+          }}
+        ></div>
       </div>
       <div className="mt-3 w-full">
         <h3 className="text-xs font-semibold h-[2rem] leading-4 overflow-hidden text-ellipsis line-clamp-2">
