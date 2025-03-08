@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import BottomBar from "@/components/BottomBar";
 import { GoogleAnalytics } from "@next/third-parties/google";
+import { Analytics } from "@vercel/analytics/react";
 import TanstackQueryProvider from "./provider/TanstackQueryProvider";
 import { Suspense } from "react";
 
@@ -41,6 +42,7 @@ export default function RootLayout({
     <html lang="ja">
       <body className="flex flex-col min-h-screen">
         <GoogleAnalytics gaId={process.env.NEXT_PUBLIC_GA_TRACKING_ID!} />
+        <Analytics />
         <main className="flex-1">
           <Suspense fallback={<div>Loading...</div>}>
             <TanstackQueryProvider>
