@@ -28,13 +28,10 @@ export async function PATCH(request: Request) {
     const { isbn, isVisible } = body;
 
     if (!isbn) {
-      return NextResponse.json(
-        { error: "ISBNが必要です" },
-        { status: 400 }
-      );
+      return NextResponse.json({ error: "ISBNが必要です" }, { status: 400 });
     }
 
-    if (typeof isVisible !== 'boolean') {
+    if (typeof isVisible !== "boolean") {
       return NextResponse.json(
         { error: "isVisibleはブール値である必要があります" },
         { status: 400 }
@@ -57,16 +54,19 @@ export async function PATCH(request: Request) {
     const updatedBook = await prisma.books.update({
       where: { isbn },
       data: {
-        is_visible: isVisible
+        is_visible: isVisible,
       },
     });
 
     return NextResponse.json(updatedBook);
-
   } catch (error) {
     console.error("Error details:", error);
     return NextResponse.json(
-      { error: `サーバーエラーが発生しました: ${error instanceof Error ? error.message : String(error)}` },
+      {
+        error: `サーバーエラーが発生しました: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      },
       { status: 500 }
     );
   }
@@ -76,17 +76,23 @@ export async function PATCH(request: Request) {
 export async function GET(request: Request) {
   try {
     const { searchParams } = new URL(request.url);
-    const isbn = searchParams.get('isbn');
-    const genre = searchParams.get('genre');
+    const isbn = searchParams.get("isbn");
+    const genre = searchParams.get("genre");
 
     // ISBNが指定されている場合は特定の本の表示/非表示状態を返す
     if (isbn) {
-      const book = await prisma.books.findUnique({
-        where: { isbn },
+      const book = await prisma.books.findFirst({
+        where: {
+          isbn,
+          published_at: {
+            gte: new Date("2022-01-01")
+          }
+        },
         select: {
           isbn: true,
           title: true,
-          is_visible: true
+          is_visible: true,
+          published_at: true,
         },
       });
 
@@ -109,6 +115,9 @@ export async function GET(request: Request) {
               genre_id: genre,
             },
           },
+          published_at: {
+            gte: new Date("2022-01-01"),
+          },
         },
         select: {
           isbn: true,
@@ -119,7 +128,7 @@ export async function GET(request: Request) {
           published_at: true,
         },
         orderBy: {
-          published_at: 'desc',
+          published_at: "desc",
         },
       });
 
@@ -128,6 +137,11 @@ export async function GET(request: Request) {
 
     // パラメータが指定されていない場合は全ての本の表示/非表示状態を返す
     const books = await prisma.books.findMany({
+      where: {
+        published_at: {
+          gte: new Date("2022-01-01"),
+        },
+      },
       select: {
         isbn: true,
         title: true,
@@ -142,16 +156,19 @@ export async function GET(request: Request) {
         },
       },
       orderBy: {
-        published_at: 'desc',
+        published_at: "desc",
       },
     });
 
     return NextResponse.json(books);
-
   } catch (error) {
     console.error("Error details:", error);
     return NextResponse.json(
-      { error: `サーバーエラーが発生しました: ${error instanceof Error ? error.message : String(error)}` },
+      {
+        error: `サーバーエラーが発生しました: ${
+          error instanceof Error ? error.message : String(error)
+        }`,
+      },
       { status: 500 }
     );
   }
